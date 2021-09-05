@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ namespacedRepositoryInterface }};
+use {{ namespacedModel }};
+use Wimski\ModelRepositories\Repositories\AbstractModelRepository;
+
+/**
+ * @extends AbstractModelRepository<{{ model }}>
+ */
+class {{ class }} extends AbstractModelRepository implements {{ repositoryInterface }}
+{
+    public function __construct({{ model }} $model)
+    {
+        $this->model = $model;
+    }
+}

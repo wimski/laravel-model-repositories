@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ namespace }};
+
+use {{ namespacedModel }};
+use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
+
+/**
+ * @extends ModelRepositoryInterface<{{ model }}>
+ */
+interface {{ class }} extends ModelRepositoryInterface
+{
+}
