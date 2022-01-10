@@ -6,25 +6,28 @@
 
 Generic repository pattern for Laravel Eloquent models.
 
-## Installation
+## Usage
 
-You can install the package via composer:
+### Install package
 
 ```bash
-composer require --dev wimski/laravel-model-repositories
+composer require wimski/laravel-model-repositories
 ```
 
-The package is **NOT** loaded using [Package Discovery](https://laravel.com/docs/8.x/packages#package-discovery).
-You should create your own service provider that extends the one from this package and it add it to your config manually.
+### Setup service provider
 
+This package is **NOT** loaded using [package discovery](https://laravel.com/docs/8.x/packages#package-discovery).
+You should create your own service provider that extends the one from this package and add it to your config manually.
+
+`app/Providers/RepositoryServiceProvider.php`
 ```php
 <?php
 
 namespace App\Providers;
 
-use Wimski\ModelRepositories\Providers\ServiceProvider as ServiceProvider;
+use Wimski\ModelRepositories\Providers\ModelRepositoryServiceProvider;
 
-class ModelRepositoryServiceProvider extends ServiceProvider
+class RepositoryServiceProvider extends ModelRepositoryServiceProvider
 {
     protected array $repositories = [
         // add your repository bindings here
@@ -41,17 +44,132 @@ return [
         /*
          * Application Service Providers...
          */
-         App\Providers\ModelRepositoryServiceProvider::class,
+         App\Providers\RepositoryServiceProvider::class,
     ],
 ];
 ```
 
-## Usage
+### Generate a repository
 
-* generate repositories
-* add to SP
-* edit/publish namespaces config
-* edit/publish stubs
+```bash
+php artisan make:repository App\\Models\\MyModel
+```
+
+This will create the following files:
+* `MyModelRepositoryInterface.php`
+* `MyModelRepository.php`
+
+The namespace and file location depend on the [namespace configuration](#namespace-configuration).
+
+### Add repository binding
+
+Set up the binding of your new repository in the [service provider](#setup-service-provider).
+
+```php
+protected array $repositories = [
+    MyModelRespositoryInterface::class => MyModelRespository::class,
+];
+```
+
+## Example usage
+
+```php
+class SomeService
+{
+    protected MyModelRespositoryInterface $repository;
+    
+    public function __construct(MyModelRespositoryInterface $repository)
+    {
+        $this->repository = $repository;    
+    }
+    
+    public function doSomething($id): void
+    {
+        $myModel = $this->repository->findOrFail($id);
+    }
+}
+```
+
+## Namespace configuration
+
+The namespaces configuration is used to determine what the namespaces of your repository classes - and locations of the subsequent files - should be.
+Each configuration exists of three parts:
+* `models`
+* `contracts`
+* `repositories`
+
+When [generating a repository](#generate-a-repository) for a model the command will look for a namespace configuration which has a `models` part that matches the supplied model.
+The `contracts` and `repositories` parts of that configuration are then used as the namespaces for the repository classes.
+
+### Assumptions
+
+* The namespaces follow the PSR-4 file location convention.
+* The namespaces are within the Laravel app directory.
+
+### Default configuration
+
+```php
+'namespaces' => [
+    [
+        'models'       => 'App\\Models',
+        'contracts'    => 'App\\Contracts\\Repositories',
+        'repositories' => 'App\\Repositories',
+    ],
+],
+```
+
+When generating a repository for `App\Models\MyModel`, the following two classes will be created:
+* `App\Contracts\Repositories\MyModelRepositoryInterface`
+* `App\Repositories\MyModelRepository`
+
+### Multiple configurations
+
+You can have multiple namespace configurations, for example when using domains.
+
+```php
+'namespaces' => [
+    [
+        'models'       => 'App\\DomainA\\Models',
+        'contracts'    => 'App\\DomainA\\Contracts\\Repositories',
+        'repositories' => 'App\\DomainA\\Repositories',
+    ],
+    [
+        'models'       => 'App\\DomainB\\Models',
+        'contracts'    => 'App\\DomainB\\Contracts\\Repositories',
+        'repositories' => 'App\\DomainB\\Repositories',
+    ],
+],
+```
+
+### Specificity
+
+The first match will be used so if you have overlapping namespace configurations, make sure to have the more specific ones on top.
+
+```php
+'namespaces' => [
+    [
+        'models' => 'App\\Models\\SpecificModels',
+        ...
+    ],
+    [
+        'models' => 'App\\Models',
+        ...
+    ],
+],
+```
+
+## Available methods
+
+* `findOrFail`
+* `findMany`
+* `all`
+
+## Stub customization
+
+See Laravel's documentation about [stub customization](https://laravel.com/docs/8.x/artisan#stub-customization).
+This package adds the following stub files:
+* `model.repository.interface.stub`
+* `model.repository.stub`
 
 ## Testing
 
