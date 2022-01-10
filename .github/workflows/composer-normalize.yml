@@ -1,4 +1,4 @@
-name: normalize composer.json
+name: Normalize composer.json
 
 on:
     push:
