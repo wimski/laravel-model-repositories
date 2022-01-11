@@ -7,6 +7,10 @@
 
 Generic repository pattern for Laravel Eloquent models.
 
+## Changelog
+
+[View the changelog.](./CHANGELOG.md)
+
 ## Usage
 
 ### Install package
