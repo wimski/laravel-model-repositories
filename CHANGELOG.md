@@ -11,5 +11,6 @@ This changelog is initialized in release 1.0.0
 
 ### Added
 * CHANGELOG.md
+* Columns argument to ModelRepositoryInterface::all to be compatible with the underlying Eloquent model
 
 [Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v1.0.0...master

@@ -16,6 +16,9 @@ class ModelWithRepositoryFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return [
+            'foo' => $this->faker->word(),
+            'bar' => $this->faker->word(),
+        ];
     }
 }

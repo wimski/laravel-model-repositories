@@ -26,7 +26,8 @@ interface ModelRepositoryInterface
     public function findMany(array $ids): Collection;
 
     /**
+     * @param string|string[] $columns
      * @return Collection<T>
      */
-    public function all(): Collection;
+    public function all($columns = ['*']): Collection;
 }

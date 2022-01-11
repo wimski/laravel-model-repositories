@@ -34,8 +34,8 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $models;
     }
 
-    public function all(): Collection
+    public function all($columns = ['*']): Collection
     {
-        return $this->model->all();
+        return $this->model->all($columns);
     }
 }
