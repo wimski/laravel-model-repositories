@@ -12,6 +12,8 @@ class CreateModelWithRepositoriesTable extends Migration
     {
         Schema::create('model_with_repositories', function (Blueprint $table) {
             $table->id();
+            $table->string('foo');
+            $table->string('bar');
             $table->timestamps();
         });
     }

@@ -68,6 +68,55 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function it_returns_all_models_with_a_specific_column(): void
+    {
+        $models = ModelWithRepository::factory()->count(5)->create();
+
+        $result = $this->repository->all('id');
+
+        $this->assertSameModels($models, $result);
+
+        static::assertEmpty(
+            $result->pluck('foo')->filter(function (?string $foo): bool {
+                return $foo !== null;
+            })->values()->all(),
+        );
+
+        static::assertEmpty(
+            $result->pluck('bar')->filter(function (?string $bar): bool {
+                return $bar !== null;
+            })->values()->all(),
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_all_models_with_specific_columns(): void
+    {
+        $models = ModelWithRepository::factory()->count(5)->create();
+
+        $result = $this->repository->all(['id', 'bar']);
+
+        $this->assertSameModels($models, $result);
+
+        static::assertEmpty(
+            $result->pluck('foo')->filter(function (?string $foo): bool {
+                return $foo !== null;
+            })->values()->all(),
+        );
+
+        static::assertCount(
+            5,
+            $result->pluck('bar')->filter(function (?string $bar): bool {
+                return $bar !== null;
+            })->values()->all(),
+        );
+    }
+
+    /**
      * @param Collection<Model> $expected
      * @param Collection<Model> $actual
      */
