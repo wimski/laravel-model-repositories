@@ -1,6 +1,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Coverage Status](https://coveralls.io/repos/github/wimski/laravel-model-repositories/badge.svg?branch=master)](https://coveralls.io/github/wimski/laravel-model-repositories?branch=master)
-[![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat)](https://github.com/phpstan/phpstan)
+[![PHPUnit](https://github.com/wimski/laravel-model-repositories/actions/workflows/phpunit.yml/badge.svg)](https://github.com/wimski/laravel-model-repositories/actions/workflows/phpunit.yml)
+[![PHPStan](https://github.com/wimski/laravel-model-repositories/actions/workflows/phpstan.yml/badge.svg)](https://github.com/wimski/laravel-model-repositories/actions/workflows/phpstan.yml)
 
 # Laravel Model Repositories
 
