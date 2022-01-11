@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Wimski\ModelRepositories\Contracts\Resolvers\NamespaceResolverInterface;
 use Wimski\ModelRepositories\Contracts\Resolvers\StubsPathResolverInterface;
 use Wimski\ModelRepositories\DataObjects\NamespaceDataObject;
@@ -36,11 +37,13 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
     {
         $this->model = $this->qualifyClass($this->getModelInput());
 
-        try {
-            $this->namespace = $this->namespaceResolver->resolve($this->model);
-        } catch (Exception $exception) {
-            $this->error($exception->getMessage());
-            return false;
+        if (! $this->getContractInput() || ! $this->getRepositoryInput()) {
+            try {
+                $this->namespace = $this->namespaceResolver->resolve($this->model);
+            } catch (Exception $exception) {
+                $this->error($exception->getMessage());
+                return false;
+            }
         }
 
         $contract   = $this->getContract();
@@ -73,8 +76,28 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
         return trim($argument);
     }
 
+    protected function getContractInput(): ?string
+    {
+        /** @var ?string $option */
+        $option = $this->option('contract');
+
+        return $option ? trim($option) : $option;
+    }
+
+    protected function getRepositoryInput(): ?string
+    {
+        /** @var ?string $option */
+        $option = $this->option('repository');
+
+        return $option ? trim($option) : $option;
+    }
+
     protected function getContract(): string
     {
+        if ($this->getContractInput()) {
+            return $this->getContractInput();
+        }
+
         $model = str_replace($this->namespace->getModelsNamespace(), '', $this->model);
 
         return ltrim($this->namespace->getContractsNamespace() . $model . 'RepositoryInterface', '\\');
@@ -82,6 +105,10 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
 
     protected function getRepository(): string
     {
+        if ($this->getRepositoryInput()) {
+            return $this->getRepositoryInput();
+        }
+
         $model = str_replace($this->namespace->getModelsNamespace(), '', $this->model);
 
         return ltrim($this->namespace->getRepositoriesNamespace() . $model . 'Repository', '\\');
@@ -153,6 +180,17 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
     {
         return [
             ['model', InputArgument::REQUIRED, 'The FQN of the model to make a repository for'],
+        ];
+    }
+
+    /**
+     * @return mixed[][]
+     */
+    protected function getOptions(): array
+    {
+        return [
+            ['contract', null, InputOption::VALUE_OPTIONAL, 'The FQN of the repository interface to generate'],
+            ['repository', null, InputOption::VALUE_OPTIONAL, 'The FQN of the repository class to generate'],
         ];
     }
 }

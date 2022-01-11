@@ -86,6 +86,77 @@ class ModelWithoutRepositoryRepository extends AbstractModelRepository implement
     /**
      * @test
      */
+    public function it_makes_a_model_repository_with_specific_fqns(): void
+    {
+        $contractDir    = $this->getAppStubPath('Foo');
+        $contractFile   = $contractDir . DIRECTORY_SEPARATOR . 'Bar.php';
+        $repositoryDir  = $this->getAppStubPath('Bar');
+        $repositoryFile = $repositoryDir . DIRECTORY_SEPARATOR . 'Foo.php';
+
+        /** @var PendingCommand $command */
+        $command = $this->artisan('make:repository', [
+            'model'        => ModelWithoutRepository::class,
+            '--contract'   => 'Wimski\\ModelRepositories\\Tests\\Laravel\\App\\Foo\\Bar',
+            '--repository' => 'Wimski\\ModelRepositories\\Tests\\Laravel\\App\\Bar\\Foo',
+        ]);
+
+        $command
+            ->expectsOutput('Repository created successfully.')
+            ->execute();
+
+        static::assertFileExists($contractFile);
+        static::assertFileExists($repositoryFile);
+
+        static::assertSame(
+            '<?php
+
+declare(strict_types=1);
+
+namespace Wimski\ModelRepositories\Tests\Laravel\App\Foo;
+
+use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
+use Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithoutRepository;
+
+/**
+ * @extends ModelRepositoryInterface<ModelWithoutRepository>
+ */
+interface Bar extends ModelRepositoryInterface
+{
+}
+', file_get_contents($contractFile));
+
+        static::assertSame(
+            '<?php
+
+declare(strict_types=1);
+
+namespace Wimski\ModelRepositories\Tests\Laravel\App\Bar;
+
+use Wimski\ModelRepositories\Repositories\AbstractModelRepository;
+use Wimski\ModelRepositories\Tests\Laravel\App\Foo\Bar;
+use Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithoutRepository;
+
+/**
+ * @extends AbstractModelRepository<ModelWithoutRepository>
+ */
+class Foo extends AbstractModelRepository implements Bar
+{
+    public function __construct(ModelWithoutRepository $model)
+    {
+        $this->model = $model;
+    }
+}
+', file_get_contents($repositoryFile));
+
+        unlink($contractFile);
+        unlink($repositoryFile);
+        rmdir($contractDir);
+        rmdir($repositoryDir);
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_an_error_if_no_namespace_configuration_could_be_found_for_the_model_class(): void
     {
         /** @var PendingCommand $command */
