@@ -7,6 +7,21 @@
 
 Generic repository pattern for Laravel Eloquent models.
 
+* [Changelog](#changelog)
+* [Usage](#usage)
+  * [Install package](#install-package)
+  * [Setup service provider](#setup-service-provider)
+  * [Generate a repository](#generate-a-repository)
+  * [Add repository binding](#add-repository-binding)
+* [Example usage](#example-usage)
+* [Namespace configuration](#namespace-configuration)
+  * [Assumptions](#assumptions)
+  * [Default configuration](#default-configuration)
+  * [Multiple configurations](#multiple-configurations)
+  * [Specificity](#specificity)
+* [Available methods](#available-methods)
+* [Stub customization](#stub-customization)
+
 ## Changelog
 
 [View the changelog.](./CHANGELOG.md)
@@ -65,6 +80,13 @@ This will create the following files:
 * `MyModelRepository.php`
 
 The namespace and file location depend on the [namespace configuration](#namespace-configuration).
+
+Alternatively you can completely override the contract and repository FQN by using the command options.
+The namespace matching and class name suffixing will be skipped.
+
+```bash
+php artisan make:repository App\\Models\\MyModel --contract=Foo\\Bar --repository=Lorem\\Ipsum
+```
 
 ### Add repository binding
 
@@ -176,10 +198,16 @@ This package adds the following stub files:
 * `model.repository.interface.stub`
 * `model.repository.stub`
 
-## Testing
+## PHPUnit
 
 ```bash
 composer test
+```
+
+## PHPStan
+
+```bash
+composer analyze
 ```
 
 ## Credits
