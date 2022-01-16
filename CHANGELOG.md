@@ -9,7 +9,10 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
-[v1.1.0] - 2022-01-11
+### Changed
+* Refactor repository methods
+
+## [v1.1.0] - 2022-01-11
 
 ### Added
 * CHANGELOG.md
