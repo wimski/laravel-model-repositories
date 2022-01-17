@@ -187,9 +187,7 @@ The first match will be used so if you have overlapping namespace configurations
 
 ## Available methods
 
-* `findOrFail`
-* `findMany`
-* `all`
+See [interface](./src/Contracts/Repositories/ModelRepositoryInterface.php).
 
 ## Stub customization
 

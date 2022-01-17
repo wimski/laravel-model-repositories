@@ -10,9 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 use Wimski\ModelRepositories\Tests\Laravel\Database\Factories\ModelWithRepositoryFactory;
 
 /**
- * @property string $id
- * @property string $foo
- * @property string $bar
+ * @property int $id
+ * @property string|null $foo
+ * @property string|null $bar
  * @method static \Wimski\ModelRepositories\Tests\Laravel\Database\Factories\ModelWithRepositoryFactory factory(...$parameters)
  */
 class ModelWithRepository extends Model
