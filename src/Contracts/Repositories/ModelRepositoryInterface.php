@@ -38,7 +38,7 @@ interface ModelRepositoryInterface
     public function findMany($keys, string ...$column): Collection;
 
     /**
-     * @param string|string[]|array<string, mixed>|Closure|Expression $column
+     * @param string|mixed[]|Closure|Expression $column
      * @param mixed                                                   $operator
      * @param mixed                                                   $value
      * @param string                                                  $boolean
@@ -47,7 +47,7 @@ interface ModelRepositoryInterface
     public function firstWhere($column, $operator = null, $value = null, string $boolean = 'and');
 
     /**
-     * @param string|string[]|array<string, mixed>|Closure|Expression $column
+     * @param string|mixed[]|Closure|Expression $column
      * @param mixed                                                   $operator
      * @param mixed                                                   $value
      * @param string                                                  $boolean
@@ -57,7 +57,7 @@ interface ModelRepositoryInterface
     public function firstWhereOrFail($column, $operator = null, $value = null, string $boolean = 'and');
 
     /**
-     * @param string|string[]|array<string, mixed>|Closure|Expression $column
+     * @param string|mixed[]|Closure|Expression $column
      * @param mixed                                                   $operator
      * @param mixed                                                   $value
      * @param string                                                  $boolean

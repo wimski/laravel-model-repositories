@@ -9,6 +9,11 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+## [v2.1.1] - 2022-01-18
+
+### Fixed
+* Array type for $column in where methods
+
 ## [v2.1.0] - 2022-01-18
 
 ### Added
@@ -26,7 +31,8 @@ This changelog is initialized in release 1.0.0
 * Columns argument to ModelRepositoryInterface::all to be compatible with the underlying Eloquent model
 * FQN options for contract and repository to ModelRepositoryMakeCommand
 
-[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v2.1.0...master
+[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v2.1.1...master
+[v2.1.1]: https://github.com/wimski/laravel-model-repositories/compare/v2.1.0...v2.1.1
 [v2.1.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.0.0...v2.1.0
 [v2.0.0]: https://github.com/wimski/laravel-model-repositories/compare/v1.1.0...v2.0.0
 [v1.1.0]: https://github.com/wimski/laravel-model-repositories/compare/v1.0.0...v1.1.0
