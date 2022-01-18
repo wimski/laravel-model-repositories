@@ -204,6 +204,13 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         $result = $this->repository->firstWhere('foo', 'lorem');
 
         static::assertTrue($this->model->is($result));
+
+        $result = $this->repository->firstWhere([
+            'foo' => 'lorem',
+            'bar' => 'ipsum',
+        ]);
+
+        static::assertTrue($this->model->is($result));
     }
 
     /**
@@ -222,6 +229,13 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     public function it_returns_a_model_for_first_where_or_fail(): void
     {
         $result = $this->repository->firstWhereOrFail('foo', 'lorem');
+
+        static::assertTrue($this->model->is($result));
+
+        $result = $this->repository->firstWhereOrFail([
+            'foo' => 'lorem',
+            'bar' => 'ipsum',
+        ]);
 
         static::assertTrue($this->model->is($result));
     }
@@ -243,6 +257,15 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     public function it_returns_a_collection_for_where(): void
     {
         $result = $this->repository->where('foo', 'lorem');
+
+        static::assertSame([
+            23,
+            36,
+        ], $result->pluck('id')->values()->all());
+
+        $result = $this->repository->where([
+            'foo' => 'lorem',
+        ]);
 
         static::assertSame([
             23,
