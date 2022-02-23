@@ -9,6 +9,9 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+### Added
+* Laravel 9 support
+
 ## [v2.1.1] - 2022-01-18
 
 ### Fixed
