@@ -37,7 +37,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
 
     public function findMany($keys, string ...$column): Collection
     {
-        /** @var Collection<T> $models */
+        /** @var Collection<int, T> $models */
         $models = $this->model->findMany($keys, $this->parseColumns(...$column));
 
         return $models;
@@ -65,7 +65,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
 
     public function where($column, $operator = null, $value = null, string $boolean = 'and'): Collection
     {
-        /** @var Collection<T> $models */
+        /** @var Collection<int, T> $models */
         $models = $this->model->where($column, $operator, $value, $boolean)->get();
 
         return $models;
@@ -73,7 +73,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
 
     public function all(string ...$column): Collection
     {
-        /** @var Collection<T> $models */
+        /** @var Collection<int, T> $models */
         $models = $this->model->all($this->parseColumns(...$column));
 
         return $models;
@@ -94,6 +94,6 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
      */
     protected function throwModelNotFoundException(...$key): void
     {
-        throw (new ModelNotFoundException())->setModel(get_class($this->model), $key);
+        throw (new ModelNotFoundException())->setModel(get_class($this->model), array_values($key));
     }
 }
