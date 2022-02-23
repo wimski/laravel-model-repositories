@@ -19,6 +19,9 @@ class ModelWithRepository extends Model
 {
     use HasFactory;
 
+    /**
+     * @return Factory<ModelWithRepository>
+     */
     protected static function newFactory(): Factory
     {
         return new ModelWithRepositoryFactory();

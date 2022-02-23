@@ -16,7 +16,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     protected ModelWithRepositoryRepository $repository;
 
     /**
-     * @var Collection<ModelWithRepository>
+     * @var Collection<int, ModelWithRepository>
      */
     protected Collection $models;
 
@@ -314,8 +314,8 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param Collection<ModelWithRepository> $expected
-     * @param Collection<ModelWithRepository> $actual
+     * @param Collection<int, ModelWithRepository> $expected
+     * @param Collection<int, ModelWithRepository> $actual
      */
     protected function assertSameModels(Collection $expected, Collection $actual): void
     {
@@ -330,7 +330,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param Collection<ModelWithRepository> $models
+     * @param Collection<int, ModelWithRepository> $models
      * @param string                          $column
      */
     protected function assertModelsHaveColumn(Collection $models, string $column): void
@@ -344,7 +344,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     }
 
     /**
-     * @param Collection<ModelWithRepository> $models
+     * @param Collection<int, ModelWithRepository> $models
      * @param string                          $column
      */
     protected function assertModelsDoNotHaveColumn(Collection $models, string $column): void

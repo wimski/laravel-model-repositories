@@ -31,26 +31,26 @@ interface ModelRepositoryInterface
     public function findOrFail($key, string ...$column);
 
     /**
-     * @param int[]|string[]|Arrayable $keys
-     * @param string                   ...$column
-     * @return Collection<T>
+     * @param int[]|string[]|Arrayable<int|string, mixed> $keys
+     * @param string                                      ...$column
+     * @return Collection<int, T>
      */
     public function findMany($keys, string ...$column): Collection;
 
     /**
      * @param string|mixed[]|Closure|Expression $column
-     * @param mixed                                                   $operator
-     * @param mixed                                                   $value
-     * @param string                                                  $boolean
+     * @param mixed                             $operator
+     * @param mixed                             $value
+     * @param string                            $boolean
      * @return T|null
      */
     public function firstWhere($column, $operator = null, $value = null, string $boolean = 'and');
 
     /**
      * @param string|mixed[]|Closure|Expression $column
-     * @param mixed                                                   $operator
-     * @param mixed                                                   $value
-     * @param string                                                  $boolean
+     * @param mixed                             $operator
+     * @param mixed                             $value
+     * @param string                            $boolean
      * @return T
      * @throws ModelNotFoundException
      */
@@ -58,17 +58,17 @@ interface ModelRepositoryInterface
 
     /**
      * @param string|mixed[]|Closure|Expression $column
-     * @param mixed                                                   $operator
-     * @param mixed                                                   $value
-     * @param string                                                  $boolean
-     * @return Collection<T>
+     * @param mixed                             $operator
+     * @param mixed                             $value
+     * @param string                            $boolean
+     * @return Collection<int, T>
      */
     public function where($column, $operator = null, $value = null, string $boolean = 'and'): Collection;
 
     /**
      *
      * @param string ...$column
-     * @return Collection<T>
+     * @return Collection<int, T>
      */
     public function all(string ...$column): Collection;
 }
