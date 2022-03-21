@@ -20,6 +20,14 @@ class ModelWithRepository extends Model
     use HasFactory;
 
     /**
+     * @var string[]
+     */
+    protected $fillable = [
+        'foo',
+        'bar',
+    ];
+
+    /**
      * @return Factory<ModelWithRepository>
      */
     protected static function newFactory(): Factory

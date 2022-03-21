@@ -314,6 +314,153 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     }
 
     /**
+     * @test
+     */
+    public function it_returns_a_new_model_for_make(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->make(['foo' => 'bar']);
+
+        static::assertFalse($result->exists);
+        static::assertSame('bar', $result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_model_for_find_or_make(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->findOrMake(23);
+
+        static::assertTrue($this->model->is($result));
+
+        static::assertSame(23, $result->id);
+        static::assertSame('lorem', $result->foo);
+        static::assertSame('ipsum', $result->bar);
+    }
+
+    /**
+     * @test
+     * @depends it_returns_a_model_for_find_or_make
+     */
+    public function it_returns_a_model_with_a_specific_column_for_find_or_make(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->findOrMake(23, 'id');
+
+        static::assertSame(23, $result->id);
+        static::assertNull($result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     * @depends it_returns_a_model_for_find_or_make
+     */
+    public function it_returns_a_model_with_a_specific_columns_for_find_or_make(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->findOrMake(23, 'id', 'foo');
+
+        static::assertSame(23, $result->id);
+        static::assertSame('lorem', $result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_new_model_for_find_or_make(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->findOrMake(88);
+
+        static::assertFalse($result->exists);
+        static::assertNull($result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_model_for_first_where_or_make(): void
+    {
+        $result = $this->repository->firstWhereOrMake([
+            'foo' => 'lorem',
+            'bar' => 'ipsum',
+        ]);
+
+        static::assertTrue($this->model->is($result));
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_new_model_for_first_where_or_make(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->firstWhereOrMake(
+            ['foo' => 'something'],
+            ['bar' => 'stuff'],
+        );
+
+        static::assertFalse($result->exists);
+        static::assertSame('something', $result->foo);
+        static::assertSame('stuff', $result->bar);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_new_model_for_create(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->create([
+            'foo' => 'bar',
+            'bar' => 'foo',
+        ]);
+
+        static::assertTrue($result->exists);
+        static::assertSame('bar', $result->foo);
+        static::assertSame('foo', $result->bar);
+
+        $this->assertDatabaseCount('model_with_repositories', 4);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_model_for_first_where_or_create(): void
+    {
+        $result = $this->repository->firstWhereOrCreate([
+            'foo' => 'lorem',
+            'bar' => 'ipsum',
+        ]);
+
+        static::assertTrue($this->model->is($result));
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_new_model_for_first_where_or_create(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->firstWhereOrCreate(
+            ['foo' => 'something'],
+            ['bar' => 'stuff'],
+        );
+
+        static::assertTrue($result->exists);
+        static::assertSame('something', $result->foo);
+        static::assertSame('stuff', $result->bar);
+
+        $this->assertDatabaseCount('model_with_repositories', 4);
+    }
+
+    /**
      * @param Collection<int, ModelWithRepository> $expected
      * @param Collection<int, ModelWithRepository> $actual
      */

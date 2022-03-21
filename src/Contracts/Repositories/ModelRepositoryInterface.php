@@ -71,4 +71,37 @@ interface ModelRepositoryInterface
      * @return Collection<int, T>
      */
     public function all(string ...$column): Collection;
+
+    /**
+     * @param array<string, mixed> $attributes
+     * @return T
+     */
+    public function make(array $attributes);
+
+    /**
+     * @param int|string $key
+     * @param string     ...$column
+     * @return T
+     */
+    public function findOrMake($key, string ...$column);
+
+    /**
+     * @param array<string, mixed> $attributes
+     * @param array<string, mixed> $values
+     * @return T
+     */
+    public function firstWhereOrMake(array $attributes, array $values = []);
+
+    /**
+     * @param array<string, mixed> $attributes
+     * @return T
+     */
+    public function create(array $attributes);
+
+    /**
+     * @param array<string, mixed> $attributes
+     * @param array<string, mixed> $values
+     * @return T
+     */
+    public function firstWhereOrCreate(array $attributes, array $values = []);
 }
