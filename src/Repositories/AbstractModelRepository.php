@@ -79,6 +79,46 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $models;
     }
 
+    public function make(array $attributes)
+    {
+        /** @var T $model */
+        $model = $this->model->make($attributes);
+
+        return $model;
+    }
+
+    public function findOrMake($key, string ...$column)
+    {
+        /** @var T $model */
+        $model = $this->model->findOrNew($key, $this->parseColumns(...$column));
+
+        return $model;
+    }
+
+    public function firstWhereOrMake(array $attributes, array $values = [])
+    {
+        /** @var T $model */
+        $model = $this->model->firstOrNew($attributes, $values);
+
+        return $model;
+    }
+
+    public function create(array $attributes)
+    {
+        /** @var T $model */
+        $model = $this->model->create($attributes);
+
+        return $model;
+    }
+
+    public function firstWhereOrCreate(array $attributes, array $values = [])
+    {
+        /** @var T $model */
+        $model = $this->model->firstOrCreate($attributes, $values);
+
+        return $model;
+    }
+
     /**
      * @param string ...$column
      * @return string[]

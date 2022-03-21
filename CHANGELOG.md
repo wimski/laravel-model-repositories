@@ -9,6 +9,9 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+### Added
+* Creation methods to repository
+
 ## [v2.2.0] - 2022-02-23
 
 ### Added
