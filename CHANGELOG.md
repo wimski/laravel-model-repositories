@@ -9,6 +9,11 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+## [v2.4.0] - 2022-06-03
+
+### Added
+* First methods to repository
+
 ## [v2.3.0] - 2022-03-21
 
 ### Added
@@ -41,7 +46,8 @@ This changelog is initialized in release 1.0.0
 * Columns argument to ModelRepositoryInterface::all to be compatible with the underlying Eloquent model
 * FQN options for contract and repository to ModelRepositoryMakeCommand
 
-[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v2.3.0...master
+[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v2.4.0...master
+[v2.4.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.3.0...v2.4.0
 [v2.3.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.2.0...v2.3.0
 [v2.2.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.1.1...v2.2.0
 [v2.1.1]: https://github.com/wimski/laravel-model-repositories/compare/v2.1.0...v2.1.1

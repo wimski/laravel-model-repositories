@@ -199,6 +199,117 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_returns_a_model_for_first(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->first();
+
+        static::assertTrue($this->model->is($result));
+
+        static::assertSame(23, $result->id);
+        static::assertSame('lorem', $result->foo);
+        static::assertSame('ipsum', $result->bar);
+    }
+
+    /**
+     * @test
+     * @depends it_returns_a_model_for_first
+     */
+    public function it_returns_a_model_with_a_specific_column_for_first(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->first('id');
+
+        static::assertSame(23, $result->id);
+        static::assertNull($result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     * @depends it_returns_a_model_for_first
+     */
+    public function it_returns_a_model_with_specific_columns_for_first(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->first('id', 'foo');
+
+        static::assertSame(23, $result->id);
+        static::assertSame('lorem', $result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_null_for_first_when_a_model_cannot_be_found(): void
+    {
+        ModelWithRepository::query()->delete();
+
+        $result = $this->repository->first();
+
+        static::assertNull($result);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_model_for_first_or_fail(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->firstOrFail();
+
+        static::assertTrue($this->model->is($result));
+
+        static::assertSame(23, $result->id);
+        static::assertSame('lorem', $result->foo);
+        static::assertSame('ipsum', $result->bar);
+    }
+
+    /**
+     * @test
+     * @depends it_returns_a_model_for_first_or_fail
+     */
+    public function it_returns_a_model_with_a_specific_column_for_first_or_fail(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->firstOrFail('id');
+
+        static::assertSame(23, $result->id);
+        static::assertNull($result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     * @depends it_returns_a_model_for_first_or_fail
+     */
+    public function it_returns_a_model_with_specific_columns_for_first_or_fail(): void
+    {
+        /** @var ModelWithRepository $result */
+        $result = $this->repository->firstOrFail('id', 'foo');
+
+        static::assertSame(23, $result->id);
+        static::assertSame('lorem', $result->foo);
+        static::assertNull($result->bar);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_an_exception_for_first_or_fail_when_a_model_cannot_be_found(): void
+    {
+        ModelWithRepository::query()->delete();
+
+        static::expectException(ModelNotFoundException::class);
+        static::expectExceptionMessage('No query results for model [Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository]');
+
+        $this->repository->firstOrFail();
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_a_model_for_first_where(): void
     {
         $result = $this->repository->firstWhere('foo', 'lorem');

@@ -43,6 +43,22 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $models;
     }
 
+    public function first(string ...$column)
+    {
+        /** @var T|null $model */
+        $model = $this->model->first($this->parseColumns(...$column));
+
+        return $model;
+    }
+
+    public function firstOrFail(string ...$column)
+    {
+        /** @var T $model */
+        $model = $this->model->firstOrFail($this->parseColumns(...$column));
+
+        return $model;
+    }
+
     public function firstWhere($column, $operator = null, $value = null, string $boolean = 'and')
     {
         /** @var T|null $model */

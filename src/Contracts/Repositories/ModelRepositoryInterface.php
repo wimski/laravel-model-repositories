@@ -38,6 +38,19 @@ interface ModelRepositoryInterface
     public function findMany($keys, string ...$column): Collection;
 
     /**
+     * @param string ...$column
+     * @return T|null
+     */
+    public function first(string ...$column);
+
+    /**
+     * @param string ...$column
+     * @return T
+     * @throws ModelNotFoundException
+     */
+    public function firstOrFail(string ...$column);
+
+    /**
      * @param string|mixed[]|Closure|Expression $column
      * @param mixed                             $operator
      * @param mixed                             $value
