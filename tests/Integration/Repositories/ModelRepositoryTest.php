@@ -82,7 +82,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      * @test
      * @depends it_returns_a_model_for_find
      */
-    public function it_returns_a_model_with_a_specific_columns_for_find(): void
+    public function it_returns_a_model_with_specific_columns_for_find(): void
     {
         /** @var ModelWithRepository $result */
         $result = $this->repository->find(23, 'id', 'foo');
@@ -135,7 +135,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      * @test
      * @depends it_returns_a_model_for_find_or_fail
      */
-    public function it_returns_a_model_with_a_specific_columns_for_find_or_fail(): void
+    public function it_returns_a_model_with_specific_columns_for_find_or_fail(): void
     {
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrFail(23, 'id', 'foo');
@@ -187,7 +187,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      * @test
      * @depends it_returns_a_collection_for_find_many
      */
-    public function it_returns_a_collection_with_a_specific_columns_for_find_many(): void
+    public function it_returns_a_collection_with_specific_columns_for_find_many(): void
     {
         $result = $this->repository->findMany([23, 36, 51], 'id', 'foo');
 
@@ -304,7 +304,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      * @test
      * @depends it_returns_a_collection_for_all
      */
-    public function it_returns_a_collection_with_a_specific_columns_for_all(): void
+    public function it_returns_a_collection_with_specific_columns_for_all(): void
     {
         $result = $this->repository->all('id', 'foo');
 
@@ -359,7 +359,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      * @test
      * @depends it_returns_a_model_for_find_or_make
      */
-    public function it_returns_a_model_with_a_specific_columns_for_find_or_make(): void
+    public function it_returns_a_model_with_specific_columns_for_find_or_make(): void
     {
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrMake(23, 'id', 'foo');
