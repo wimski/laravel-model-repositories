@@ -9,6 +9,10 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+### Added
+* WhereIn method to repository
+* WhereNotIn method to repository
+
 ## [v2.4.0] - 2022-06-03
 
 ### Added

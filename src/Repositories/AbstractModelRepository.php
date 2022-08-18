@@ -87,6 +87,27 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $models;
     }
 
+    public function whereIn(string $column, array $values): Collection
+    {
+        /** @var Collection<int, T> $models */
+        $models = $this->model->whereIn($column, $values)->get();
+
+        return $models;
+    }
+
+    /**
+     * @param string  $column
+     * @param mixed[] $values
+     * @return Collection<int, T>
+     */
+    public function whereNotIn(string $column, array $values): Collection
+    {
+        /** @var Collection<int, T> $models */
+        $models = $this->model->whereNotIn($column, $values)->get();
+
+        return $models;
+    }
+
     public function all(string ...$column): Collection
     {
         /** @var Collection<int, T> $models */

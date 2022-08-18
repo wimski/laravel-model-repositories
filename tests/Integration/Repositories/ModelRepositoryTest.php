@@ -327,6 +327,31 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_returns_a_collection_for_where_in(): void
+    {
+        $result = $this->repository->whereIn('id', [23, 36]);
+
+        static::assertSame([
+            23,
+            36,
+        ], $result->pluck('id')->values()->all());
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_a_collection_for_where_not_in(): void
+    {
+        $result = $this->repository->whereNotIn('id', [23, 36]);
+
+        static::assertSame([
+            51,
+        ], $result->pluck('id')->values()->all());
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_null_for_first_where_when_a_model_cannot_be_found(): void
     {
         $result = $this->repository->firstWhere('foo', 'something');
