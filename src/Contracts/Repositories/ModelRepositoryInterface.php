@@ -86,6 +86,13 @@ interface ModelRepositoryInterface
     public function whereIn(string $column, array $values): Collection;
 
     /**
+     * @param string  $column
+     * @param mixed[] $values
+     * @return Collection<int, T>
+     */
+    public function whereNotIn(string $column, array $values): Collection;
+
+    /**
      *
      * @param string ...$column
      * @return Collection<int, T>
