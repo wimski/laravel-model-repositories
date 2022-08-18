@@ -79,6 +79,13 @@ interface ModelRepositoryInterface
     public function where($column, $operator = null, $value = null, string $boolean = 'and'): Collection;
 
     /**
+     * @param string  $column
+     * @param mixed[] $values
+     * @return Collection<int, T>
+     */
+    public function whereIn(string $column, array $values): Collection;
+
+    /**
      *
      * @param string ...$column
      * @return Collection<int, T>
