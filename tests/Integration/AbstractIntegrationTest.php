@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Wimski\ModelRepositories\Tests\Integration;
 
+use Illuminate\Contracts\Config\Repository as Config;
+use Illuminate\Foundation\Application as BaseApplication;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Foundation\PackageManifest;
 use Orchestra\Testbench\TestCase;
+use RuntimeException;
 use Wimski\ModelRepositories\Tests\Laravel\App\Providers\ModelRepositoryServiceProvider;
 use Wimski\ModelRepositories\Tests\Laravel\Application;
 
@@ -18,13 +21,22 @@ abstract class AbstractIntegrationTest extends TestCase
     {
         parent::setUp();
 
-        $this->app['config']->set('model-repositories.namespaces', [
+        $this->getApplication()->make(Config::class)->set('model-repositories.namespaces', [
             [
                 'models'       => 'Wimski\\ModelRepositories\\Tests\\Laravel\\App\\Models',
                 'contracts'    => 'Wimski\\ModelRepositories\\Tests\\Laravel\\App\\Contracts\\Repositories',
                 'repositories' => 'Wimski\\ModelRepositories\\Tests\\Laravel\\App\\Repositories',
             ],
         ]);
+    }
+
+    protected function getApplication(): BaseApplication
+    {
+        if (! $this->app) {
+            throw new RuntimeException('Application should be setup');
+        }
+
+        return $this->app;
     }
 
     protected function getPackageProviders($app): array
