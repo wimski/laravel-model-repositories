@@ -6,6 +6,7 @@ namespace Wimski\ModelRepositories\Contracts\Repositories;
 
 use Closure;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Expression;
@@ -15,6 +16,11 @@ use Illuminate\Database\Query\Expression;
  */
 interface ModelRepositoryInterface
 {
+    /**
+     * @return Builder<T>
+     */
+    public function builder(): Builder;
+
     /**
      * @param int|string $key
      * @param string     ...$column

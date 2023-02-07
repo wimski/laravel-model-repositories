@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Wimski\ModelRepositories\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
@@ -18,6 +19,14 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
      * @var T
      */
     protected $model;
+
+    public function builder(): Builder
+    {
+        /** @var Builder<T> $builder */
+        $builder = $this->model->newQuery();
+
+        return $builder;
+    }
 
     public function find($key, string ...$column)
     {

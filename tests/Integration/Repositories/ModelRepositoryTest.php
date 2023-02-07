@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Wimski\ModelRepositories\Tests\Integration\Repositories;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -47,6 +48,17 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         $this->model = $this->models->get(0);
 
         $this->repository = new ModelWithRepositoryRepository(new ModelWithRepository());
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_an_eloquent_builder(): void
+    {
+        $builder = $this->repository->builder();
+
+        self::assertInstanceOf(Builder::class, $builder);
+        self::assertSame(ModelWithRepository::class, get_class($builder->getModel()));
     }
 
     /**
