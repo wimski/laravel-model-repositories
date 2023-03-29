@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Query\Expression;
+use Illuminate\Support\LazyCollection;
 
 /**
  * @template T of \Illuminate\Database\Eloquent\Model
@@ -97,6 +98,11 @@ interface ModelRepositoryInterface
      * @return Collection<int, T>
      */
     public function whereNotIn(string $column, array $values): Collection;
+
+    /**
+     * @return LazyCollection<int, T>
+     */
+    public function cursor(): LazyCollection;
 
     /**
      *

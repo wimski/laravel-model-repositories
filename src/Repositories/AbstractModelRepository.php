@@ -7,6 +7,7 @@ namespace Wimski\ModelRepositories\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\LazyCollection;
 use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
 
 /**
@@ -113,6 +114,14 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     {
         /** @var Collection<int, T> $models */
         $models = $this->model->whereNotIn($column, $values)->get();
+
+        return $models;
+    }
+
+    public function cursor(): LazyCollection
+    {
+        /** @var LazyCollection<int, T> $models */
+        $models = $this->model->cursor();
 
         return $models;
     }

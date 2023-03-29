@@ -9,6 +9,11 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+## [v2.8.0] - 2023-03-29
+
+### Added
+* Cursor method to repository
+
 ## [v2.7.0] - 2023-02-16
 
 ### Added
@@ -62,7 +67,8 @@ This changelog is initialized in release 1.0.0
 * Columns argument to ModelRepositoryInterface::all to be compatible with the underlying Eloquent model
 * FQN options for contract and repository to ModelRepositoryMakeCommand
 
-[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v2.7.0...master
+[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v2.8.0...master
+[v2.8.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.7.0...v2.8.0
 [v2.7.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.6.0...v2.7.0
 [v2.6.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.5.0...v2.6.0
 [v2.5.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.4.0...v2.5.0

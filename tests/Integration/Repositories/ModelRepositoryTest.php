@@ -424,6 +424,28 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     /**
      * @test
      */
+    public function it_returns_a_lazy_collection_for_cursor(): void
+    {
+        $result = $this->repository->cursor();
+
+        static::assertCount(3, $result);
+
+        $result1 = $result->get(0);
+        static::assertInstanceOf(ModelWithRepository::class, $result1);
+        static::assertSame(23, $result1->getKey());
+
+        $result2 = $result->get(1);
+        static::assertInstanceOf(ModelWithRepository::class, $result2);
+        static::assertSame(36, $result2->getKey());
+
+        $result3 = $result->get(2);
+        static::assertInstanceOf(ModelWithRepository::class, $result3);
+        static::assertSame(51, $result3->getKey());
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_a_collection_for_all(): void
     {
         $result = $this->repository->all();
