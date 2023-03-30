@@ -18,9 +18,9 @@ use Illuminate\Support\LazyCollection;
 interface ModelRepositoryInterface
 {
     /**
-     * @return Builder<T>
+     * @return Builder<T>|T
      */
-    public function builder(): Builder;
+    public function builder(bool $withGlobalScopes = true);
 
     /**
      * @param int|string $key

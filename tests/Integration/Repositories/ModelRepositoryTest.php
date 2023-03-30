@@ -21,13 +21,14 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      */
     protected Collection $models;
 
-    protected ModelWithRepository $model;
+    protected ModelWithRepository $findModel;
+    protected ModelWithRepository $firstModel;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->models = ModelWithRepository::factory()->createMany([
+        ModelWithRepository::factory()->createMany([
             [
                 'id'  => 23,
                 'foo' => 'lorem',
@@ -45,7 +46,34 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             ],
         ]);
 
-        $this->model = $this->models->get(0);
+        /*
+         *  [
+         *      [
+         *          'id'  => 51,
+         *          'foo' => 'amet',
+         *          'bar' => 'consectetur',
+         *      ],
+         *      [
+         *          'id'  => 23,
+         *          'foo' => 'lorem',
+         *          'bar' => 'ipsum',
+         *      ],
+         *      [
+         *          'id'  => 36,
+         *          'foo' => 'lorem',
+         *          'bar' => 'sit',
+         *      ],
+         * ]
+         */
+        $this->models = ModelWithRepository::all();
+
+        /** @var ModelWithRepository $findModel */
+        $findModel = ModelWithRepository::query()->findOrFail(23);
+        $this->findModel = $findModel;
+
+        /** @var ModelWithRepository $firstModel */
+        $firstModel       = $this->models->get(0);
+        $this->firstModel = $firstModel;
 
         $this->repository = new ModelWithRepositoryRepository(new ModelWithRepository());
     }
@@ -63,13 +91,28 @@ class ModelRepositoryTest extends AbstractIntegrationTest
 
     /**
      * @test
+     * @depends it_returns_an_eloquent_builder
+     */
+    public function it_returns_an_eloquent_builder_without_global_scopes(): void
+    {
+        $builder = $this->repository->builder(false);
+
+        self::assertSame([
+            23,
+            36,
+            51,
+        ], $builder->get()->pluck('id')->values()->all());
+    }
+
+    /**
+     * @test
      */
     public function it_returns_a_model_for_find(): void
     {
         /** @var ModelWithRepository $result */
         $result = $this->repository->find(23);
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
 
         static::assertSame(23, $result->id);
         static::assertSame('lorem', $result->foo);
@@ -122,7 +165,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrFail(23);
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
 
         static::assertSame(23, $result->id);
         static::assertSame('lorem', $result->foo);
@@ -216,11 +259,11 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->first();
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->firstModel->is($result));
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertSame('ipsum', $result->bar);
+        static::assertSame(51, $result->id);
+        static::assertSame('amet', $result->foo);
+        static::assertSame('consectetur', $result->bar);
     }
 
     /**
@@ -232,7 +275,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->first('id');
 
-        static::assertSame(23, $result->id);
+        static::assertSame(51, $result->id);
         static::assertNull($result->foo);
         static::assertNull($result->bar);
     }
@@ -246,8 +289,8 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->first('id', 'foo');
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
+        static::assertSame(51, $result->id);
+        static::assertSame('amet', $result->foo);
         static::assertNull($result->bar);
     }
 
@@ -271,11 +314,11 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->firstOrFail();
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->firstModel->is($result));
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertSame('ipsum', $result->bar);
+        static::assertSame(51, $result->id);
+        static::assertSame('amet', $result->foo);
+        static::assertSame('consectetur', $result->bar);
     }
 
     /**
@@ -287,7 +330,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->firstOrFail('id');
 
-        static::assertSame(23, $result->id);
+        static::assertSame(51, $result->id);
         static::assertNull($result->foo);
         static::assertNull($result->bar);
     }
@@ -301,8 +344,8 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->firstOrFail('id', 'foo');
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
+        static::assertSame(51, $result->id);
+        static::assertSame('amet', $result->foo);
         static::assertNull($result->bar);
     }
 
@@ -326,14 +369,14 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->firstWhere('foo', 'lorem');
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
 
         $result = $this->repository->firstWhere([
             'foo' => 'lorem',
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
     }
 
     /**
@@ -378,14 +421,14 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->firstWhereOrFail('foo', 'lorem');
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
 
         $result = $this->repository->firstWhereOrFail([
             'foo' => 'lorem',
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
     }
 
     /**
@@ -432,15 +475,15 @@ class ModelRepositoryTest extends AbstractIntegrationTest
 
         $result1 = $result->get(0);
         static::assertInstanceOf(ModelWithRepository::class, $result1);
-        static::assertSame(23, $result1->getKey());
+        static::assertSame(51, $result1->getKey());
 
         $result2 = $result->get(1);
         static::assertInstanceOf(ModelWithRepository::class, $result2);
-        static::assertSame(36, $result2->getKey());
+        static::assertSame(23, $result2->getKey());
 
         $result3 = $result->get(2);
         static::assertInstanceOf(ModelWithRepository::class, $result3);
-        static::assertSame(51, $result3->getKey());
+        static::assertSame(36, $result3->getKey());
     }
 
     /**
@@ -504,7 +547,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrMake(23);
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
 
         static::assertSame(23, $result->id);
         static::assertSame('lorem', $result->foo);
@@ -562,7 +605,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
     }
 
     /**
@@ -609,7 +652,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        static::assertTrue($this->findModel->is($result));
     }
 
     /**

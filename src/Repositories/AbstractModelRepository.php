@@ -21,11 +21,16 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
      */
     protected $model;
 
-    public function builder(): Builder
+    public function builder(bool $withGlobalScopes = true)
     {
         /** @var Builder<T> $builder */
-        $builder = $this->model->newQuery();
+        $builder = $this->model->newQueryWithoutScopes();
 
+        if ($withGlobalScopes) {
+            $this->model->registerGlobalScopes($builder);
+        }
+
+        /** @var Builder<T>|T $builder */
         return $builder;
     }
 
