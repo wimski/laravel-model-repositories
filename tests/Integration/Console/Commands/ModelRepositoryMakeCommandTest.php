@@ -38,10 +38,10 @@ class ModelRepositoryMakeCommandTest extends AbstractIntegrationTest
             ->expectsOutput('Repository created successfully.')
             ->execute();
 
-        static::assertFileExists($this->getRepositoryInterfacePath());
-        static::assertFileExists($this->getRepositoryPath());
+        self::assertFileExists($this->getRepositoryInterfacePath());
+        self::assertFileExists($this->getRepositoryPath());
 
-        static::assertSame(
+        self::assertSame(
             '<?php
 
 declare(strict_types=1);
@@ -59,7 +59,7 @@ interface ModelWithoutRepositoryRepositoryInterface extends ModelRepositoryInter
 }
 ', file_get_contents($this->getRepositoryInterfacePath()));
 
-        static::assertSame(
+        self::assertSame(
             '<?php
 
 declare(strict_types=1);
@@ -104,10 +104,10 @@ class ModelWithoutRepositoryRepository extends AbstractModelRepository implement
             ->expectsOutput('Repository created successfully.')
             ->execute();
 
-        static::assertFileExists($contractFile);
-        static::assertFileExists($repositoryFile);
+        self::assertFileExists($contractFile);
+        self::assertFileExists($repositoryFile);
 
-        static::assertSame(
+        self::assertSame(
             '<?php
 
 declare(strict_types=1);
@@ -125,7 +125,7 @@ interface Bar extends ModelRepositoryInterface
 }
 ', file_get_contents($contractFile));
 
-        static::assertSame(
+        self::assertSame(
             '<?php
 
 declare(strict_types=1);
@@ -204,11 +204,11 @@ class Foo extends AbstractModelRepository implements Bar
             ->expectsOutput('Repository created successfully.')
             ->execute();
 
-        static::assertFileExists($this->getRepositoryInterfacePath());
-        static::assertFileExists($this->getRepositoryPath());
+        self::assertFileExists($this->getRepositoryInterfacePath());
+        self::assertFileExists($this->getRepositoryPath());
 
-        static::assertSame('Foo', file_get_contents($this->getRepositoryInterfacePath()));
-        static::assertSame('Bar', file_get_contents($this->getRepositoryPath()));
+        self::assertSame('Foo', file_get_contents($this->getRepositoryInterfacePath()));
+        self::assertSame('Bar', file_get_contents($this->getRepositoryPath()));
 
         unlink($interfaceStub);
         unlink($repositoryStub);

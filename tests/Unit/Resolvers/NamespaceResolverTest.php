@@ -48,7 +48,7 @@ class NamespaceResolverTest extends AbstractUnitTest
 
         $namespaces = $this->resolver->resolve('App\\Models\\Foo\\Bar');
 
-        static::assertSame('\\App\\Models', $namespaces->getModelsNamespace());
+        self::assertSame('\\App\\Models', $namespaces->getModelsNamespace());
     }
 
     /**
@@ -56,8 +56,8 @@ class NamespaceResolverTest extends AbstractUnitTest
      */
     public function it_throws_an_error_if_no_namespace_configuration_could_be_found_for_a_model_class(): void
     {
-        static::expectException(Exception::class);
-        static::expectExceptionMessage('No namespace found for Foo\\Bar');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('No namespace found for Foo\\Bar');
 
         $this->config
             ->shouldReceive('get')

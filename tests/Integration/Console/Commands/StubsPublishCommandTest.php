@@ -29,10 +29,10 @@ class StubsPublishCommandTest extends AbstractIntegrationTest
             ->expectsOutput('Repository stubs published successfully.')
             ->execute();
 
-        static::assertFileExists($this->getRepositoryInterfacePath());
-        static::assertFileExists($this->getRepositoryPath());
+        self::assertFileExists($this->getRepositoryInterfacePath());
+        self::assertFileExists($this->getRepositoryPath());
 
-        static::assertSame('<?php
+        self::assertSame('<?php
 
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ interface {{ class }} extends ModelRepositoryInterface
 }
 ', file_get_contents($this->getRepositoryInterfacePath()));
 
-        static::assertSame('<?php
+        self::assertSame('<?php
 
 declare(strict_types=1);
 

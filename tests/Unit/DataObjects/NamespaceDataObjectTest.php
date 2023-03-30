@@ -27,7 +27,7 @@ class NamespaceDataObjectTest extends AbstractUnitTest
      */
     public function it_returns_the_model_namespace(): void
     {
-        static::assertSame('models-namespace', $this->dataObject->getModelsNamespace());
+        self::assertSame('models-namespace', $this->dataObject->getModelsNamespace());
     }
 
     /**
@@ -35,7 +35,7 @@ class NamespaceDataObjectTest extends AbstractUnitTest
      */
     public function it_returns_the_contract_namespace(): void
     {
-        static::assertSame('contracts-namespace', $this->dataObject->getContractsNamespace());
+        self::assertSame('contracts-namespace', $this->dataObject->getContractsNamespace());
     }
 
     /**
@@ -43,6 +43,6 @@ class NamespaceDataObjectTest extends AbstractUnitTest
      */
     public function it_returns_the_repository_namespace(): void
     {
-        static::assertSame('repositories-namespace', $this->dataObject->getRepositoriesNamespace());
+        self::assertSame('repositories-namespace', $this->dataObject->getRepositoriesNamespace());
     }
 }
