@@ -37,7 +37,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function find($key, string ...$column)
     {
         /** @var T|null $model */
-        $model = $this->model->find($key, $this->parseColumns(...$column));
+        $model = $this->builder()->find($key, $this->parseColumns(...$column));
 
         return $model;
     }
@@ -45,7 +45,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function findOrFail($key, string ...$column)
     {
         /** @var T $model */
-        $model = $this->model->findOrFail($key, $this->parseColumns(...$column));
+        $model = $this->builder()->findOrFail($key, $this->parseColumns(...$column));
 
         return $model;
     }
@@ -53,7 +53,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function findMany($keys, string ...$column): Collection
     {
         /** @var Collection<int, T> $models */
-        $models = $this->model->findMany($keys, $this->parseColumns(...$column));
+        $models = $this->builder()->findMany($keys, $this->parseColumns(...$column));
 
         return $models;
     }
@@ -61,7 +61,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function first(string ...$column)
     {
         /** @var T|null $model */
-        $model = $this->model->first($this->parseColumns(...$column));
+        $model = $this->builder()->first($this->parseColumns(...$column));
 
         return $model;
     }
@@ -69,7 +69,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function firstOrFail(string ...$column)
     {
         /** @var T $model */
-        $model = $this->model->firstOrFail($this->parseColumns(...$column));
+        $model = $this->builder()->firstOrFail($this->parseColumns(...$column));
 
         return $model;
     }
@@ -77,7 +77,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function firstWhere($column, $operator = null, $value = null, string $boolean = 'and')
     {
         /** @var T|null $model */
-        $model = $this->model->firstWhere($column, $operator, $value, $boolean);
+        $model = $this->builder()->firstWhere($column, $operator, $value, $boolean);
 
         return $model;
     }
@@ -97,7 +97,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function where($column, $operator = null, $value = null, string $boolean = 'and'): Collection
     {
         /** @var Collection<int, T> $models */
-        $models = $this->model->where($column, $operator, $value, $boolean)->get();
+        $models = $this->builder()->where($column, $operator, $value, $boolean)->get();
 
         return $models;
     }
@@ -105,7 +105,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function whereIn(string $column, array $values): Collection
     {
         /** @var Collection<int, T> $models */
-        $models = $this->model->whereIn($column, $values)->get();
+        $models = $this->builder()->whereIn($column, $values)->get();
 
         return $models;
     }
@@ -118,7 +118,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function whereNotIn(string $column, array $values): Collection
     {
         /** @var Collection<int, T> $models */
-        $models = $this->model->whereNotIn($column, $values)->get();
+        $models = $this->builder()->whereNotIn($column, $values)->get();
 
         return $models;
     }
@@ -126,7 +126,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function cursor(): LazyCollection
     {
         /** @var LazyCollection<int, T> $models */
-        $models = $this->model->cursor();
+        $models = $this->builder()->cursor();
 
         return $models;
     }
@@ -134,7 +134,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function all(string ...$column): Collection
     {
         /** @var Collection<int, T> $models */
-        $models = $this->model->all($this->parseColumns(...$column));
+        $models = $this->builder()->get($this->parseColumns(...$column));
 
         return $models;
     }
@@ -142,7 +142,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function make(array $attributes)
     {
         /** @var T $model */
-        $model = $this->model->make($attributes);
+        $model = $this->builder()->make($attributes);
 
         return $model;
     }
@@ -150,7 +150,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function findOrMake($key, string ...$column)
     {
         /** @var T $model */
-        $model = $this->model->findOrNew($key, $this->parseColumns(...$column));
+        $model = $this->builder()->findOrNew($key, $this->parseColumns(...$column));
 
         return $model;
     }
@@ -158,7 +158,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function firstWhereOrMake(array $attributes, array $values = [])
     {
         /** @var T $model */
-        $model = $this->model->firstOrNew($attributes, $values);
+        $model = $this->builder()->firstOrNew($attributes, $values);
 
         return $model;
     }
@@ -166,7 +166,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function create(array $attributes)
     {
         /** @var T $model */
-        $model = $this->model->create($attributes);
+        $model = $this->builder()->create($attributes);
 
         return $model;
     }
@@ -174,7 +174,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     public function firstWhereOrCreate(array $attributes, array $values = [])
     {
         /** @var T $model */
-        $model = $this->model->firstOrCreate($attributes, $values);
+        $model = $this->builder()->firstOrCreate($attributes, $values);
 
         return $model;
     }
