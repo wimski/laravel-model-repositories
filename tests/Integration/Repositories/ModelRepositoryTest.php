@@ -21,13 +21,14 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      */
     protected Collection $models;
 
-    protected ModelWithRepository $model;
+    protected ModelWithRepository $findModel;
+    protected ModelWithRepository $firstModel;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->models = ModelWithRepository::factory()->createMany([
+        ModelWithRepository::factory()->createMany([
             [
                 'id'  => 23,
                 'foo' => 'lorem',
@@ -45,7 +46,34 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             ],
         ]);
 
-        $this->model = $this->models->get(0);
+        /*
+         *  [
+         *      [
+         *          'id'  => 51,
+         *          'foo' => 'amet',
+         *          'bar' => 'consectetur',
+         *      ],
+         *      [
+         *          'id'  => 23,
+         *          'foo' => 'lorem',
+         *          'bar' => 'ipsum',
+         *      ],
+         *      [
+         *          'id'  => 36,
+         *          'foo' => 'lorem',
+         *          'bar' => 'sit',
+         *      ],
+         * ]
+         */
+        $this->models = ModelWithRepository::all();
+
+        /** @var ModelWithRepository $findModel */
+        $findModel = ModelWithRepository::query()->findOrFail(23);
+        $this->findModel = $findModel;
+
+        /** @var ModelWithRepository $firstModel */
+        $firstModel       = $this->models->get(0);
+        $this->firstModel = $firstModel;
 
         $this->repository = new ModelWithRepositoryRepository(new ModelWithRepository());
     }
@@ -63,17 +91,32 @@ class ModelRepositoryTest extends AbstractIntegrationTest
 
     /**
      * @test
+     * @depends it_returns_an_eloquent_builder
+     */
+    public function it_returns_an_eloquent_builder_without_global_scopes(): void
+    {
+        $builder = $this->repository->builder(false);
+
+        self::assertSame([
+            23,
+            36,
+            51,
+        ], $builder->get()->pluck('id')->values()->all());
+    }
+
+    /**
+     * @test
      */
     public function it_returns_a_model_for_find(): void
     {
         /** @var ModelWithRepository $result */
         $result = $this->repository->find(23);
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertSame('ipsum', $result->bar);
+        self::assertSame(23, $result->id);
+        self::assertSame('lorem', $result->foo);
+        self::assertSame('ipsum', $result->bar);
     }
 
     /**
@@ -85,9 +128,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->find(23, 'id');
 
-        static::assertSame(23, $result->id);
-        static::assertNull($result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(23, $result->id);
+        self::assertNull($result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -99,9 +142,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->find(23, 'id', 'foo');
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(23, $result->id);
+        self::assertSame('lorem', $result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -111,7 +154,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->find(88);
 
-        static::assertNull($result);
+        self::assertNull($result);
     }
 
     /**
@@ -122,11 +165,11 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrFail(23);
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertSame('ipsum', $result->bar);
+        self::assertSame(23, $result->id);
+        self::assertSame('lorem', $result->foo);
+        self::assertSame('ipsum', $result->bar);
     }
 
     /**
@@ -138,9 +181,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrFail(23, 'id');
 
-        static::assertSame(23, $result->id);
-        static::assertNull($result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(23, $result->id);
+        self::assertNull($result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -152,9 +195,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrFail(23, 'id', 'foo');
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(23, $result->id);
+        self::assertSame('lorem', $result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -162,8 +205,8 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      */
     public function it_throws_an_exception_for_find_or_fail_when_a_model_cannot_be_found(): void
     {
-        static::expectException(ModelNotFoundException::class);
-        static::expectExceptionMessage('No query results for model [Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository]');
+        $this->expectException(ModelNotFoundException::class);
+        $this->expectExceptionMessage('No query results for model [Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository]');
 
         $this->repository->findOrFail(88);
     }
@@ -216,11 +259,11 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->first();
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->firstModel->is($result));
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertSame('ipsum', $result->bar);
+        self::assertSame(51, $result->id);
+        self::assertSame('amet', $result->foo);
+        self::assertSame('consectetur', $result->bar);
     }
 
     /**
@@ -232,9 +275,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->first('id');
 
-        static::assertSame(23, $result->id);
-        static::assertNull($result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(51, $result->id);
+        self::assertNull($result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -246,9 +289,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->first('id', 'foo');
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(51, $result->id);
+        self::assertSame('amet', $result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -260,7 +303,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
 
         $result = $this->repository->first();
 
-        static::assertNull($result);
+        self::assertNull($result);
     }
 
     /**
@@ -271,11 +314,11 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->firstOrFail();
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->firstModel->is($result));
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertSame('ipsum', $result->bar);
+        self::assertSame(51, $result->id);
+        self::assertSame('amet', $result->foo);
+        self::assertSame('consectetur', $result->bar);
     }
 
     /**
@@ -287,9 +330,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->firstOrFail('id');
 
-        static::assertSame(23, $result->id);
-        static::assertNull($result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(51, $result->id);
+        self::assertNull($result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -301,9 +344,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->firstOrFail('id', 'foo');
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(51, $result->id);
+        self::assertSame('amet', $result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -313,8 +356,8 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         ModelWithRepository::query()->delete();
 
-        static::expectException(ModelNotFoundException::class);
-        static::expectExceptionMessage('No query results for model [Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository]');
+        $this->expectException(ModelNotFoundException::class);
+        $this->expectExceptionMessage('No query results for model [Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository]');
 
         $this->repository->firstOrFail();
     }
@@ -326,14 +369,14 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->firstWhere('foo', 'lorem');
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
 
         $result = $this->repository->firstWhere([
             'foo' => 'lorem',
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
     }
 
     /**
@@ -343,7 +386,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->whereIn('id', [23, 36]);
 
-        static::assertSame([
+        self::assertSame([
             23,
             36,
         ], $result->pluck('id')->values()->all());
@@ -356,7 +399,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->whereNotIn('id', [23, 36]);
 
-        static::assertSame([
+        self::assertSame([
             51,
         ], $result->pluck('id')->values()->all());
     }
@@ -368,7 +411,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->firstWhere('foo', 'something');
 
-        static::assertNull($result);
+        self::assertNull($result);
     }
 
     /**
@@ -378,14 +421,14 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->firstWhereOrFail('foo', 'lorem');
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
 
         $result = $this->repository->firstWhereOrFail([
             'foo' => 'lorem',
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
     }
 
     /**
@@ -393,8 +436,8 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      */
     public function it_throws_an_exception_for_first_where_or_fail_when_a_model_cannot_be_found(): void
     {
-        static::expectException(ModelNotFoundException::class);
-        static::expectExceptionMessage('No query results for model [Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository]');
+        $this->expectException(ModelNotFoundException::class);
+        $this->expectExceptionMessage('No query results for model [Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository]');
 
         $this->repository->firstWhereOrFail('foo', 'something');
     }
@@ -406,7 +449,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->where('foo', 'lorem');
 
-        static::assertSame([
+        self::assertSame([
             23,
             36,
         ], $result->pluck('id')->values()->all());
@@ -415,7 +458,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             'foo' => 'lorem',
         ]);
 
-        static::assertSame([
+        self::assertSame([
             23,
             36,
         ], $result->pluck('id')->values()->all());
@@ -428,19 +471,19 @@ class ModelRepositoryTest extends AbstractIntegrationTest
     {
         $result = $this->repository->cursor();
 
-        static::assertCount(3, $result);
+        self::assertCount(3, $result);
 
         $result1 = $result->get(0);
-        static::assertInstanceOf(ModelWithRepository::class, $result1);
-        static::assertSame(23, $result1->getKey());
+        self::assertInstanceOf(ModelWithRepository::class, $result1);
+        self::assertSame(51, $result1->getKey());
 
         $result2 = $result->get(1);
-        static::assertInstanceOf(ModelWithRepository::class, $result2);
-        static::assertSame(36, $result2->getKey());
+        self::assertInstanceOf(ModelWithRepository::class, $result2);
+        self::assertSame(23, $result2->getKey());
 
         $result3 = $result->get(2);
-        static::assertInstanceOf(ModelWithRepository::class, $result3);
-        static::assertSame(51, $result3->getKey());
+        self::assertInstanceOf(ModelWithRepository::class, $result3);
+        self::assertSame(36, $result3->getKey());
     }
 
     /**
@@ -491,9 +534,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->make(['foo' => 'bar']);
 
-        static::assertFalse($result->exists);
-        static::assertSame('bar', $result->foo);
-        static::assertNull($result->bar);
+        self::assertFalse($result->exists);
+        self::assertSame('bar', $result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -504,11 +547,11 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrMake(23);
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertSame('ipsum', $result->bar);
+        self::assertSame(23, $result->id);
+        self::assertSame('lorem', $result->foo);
+        self::assertSame('ipsum', $result->bar);
     }
 
     /**
@@ -520,9 +563,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrMake(23, 'id');
 
-        static::assertSame(23, $result->id);
-        static::assertNull($result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(23, $result->id);
+        self::assertNull($result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -534,9 +577,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrMake(23, 'id', 'foo');
 
-        static::assertSame(23, $result->id);
-        static::assertSame('lorem', $result->foo);
-        static::assertNull($result->bar);
+        self::assertSame(23, $result->id);
+        self::assertSame('lorem', $result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -547,9 +590,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
         /** @var ModelWithRepository $result */
         $result = $this->repository->findOrMake(88);
 
-        static::assertFalse($result->exists);
-        static::assertNull($result->foo);
-        static::assertNull($result->bar);
+        self::assertFalse($result->exists);
+        self::assertNull($result->foo);
+        self::assertNull($result->bar);
     }
 
     /**
@@ -562,7 +605,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
     }
 
     /**
@@ -576,9 +619,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             ['bar' => 'stuff'],
         );
 
-        static::assertFalse($result->exists);
-        static::assertSame('something', $result->foo);
-        static::assertSame('stuff', $result->bar);
+        self::assertFalse($result->exists);
+        self::assertSame('something', $result->foo);
+        self::assertSame('stuff', $result->bar);
     }
 
     /**
@@ -592,9 +635,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             'bar' => 'foo',
         ]);
 
-        static::assertTrue($result->exists);
-        static::assertSame('bar', $result->foo);
-        static::assertSame('foo', $result->bar);
+        self::assertTrue($result->exists);
+        self::assertSame('bar', $result->foo);
+        self::assertSame('foo', $result->bar);
 
         $this->assertDatabaseCount('model_with_repositories', 4);
     }
@@ -609,7 +652,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             'bar' => 'ipsum',
         ]);
 
-        static::assertTrue($this->model->is($result));
+        self::assertTrue($this->findModel->is($result));
     }
 
     /**
@@ -623,9 +666,9 @@ class ModelRepositoryTest extends AbstractIntegrationTest
             ['bar' => 'stuff'],
         );
 
-        static::assertTrue($result->exists);
-        static::assertSame('something', $result->foo);
-        static::assertSame('stuff', $result->bar);
+        self::assertTrue($result->exists);
+        self::assertSame('something', $result->foo);
+        self::assertSame('stuff', $result->bar);
 
         $this->assertDatabaseCount('model_with_repositories', 4);
     }
@@ -636,13 +679,13 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      */
     protected function assertSameModels(Collection $expected, Collection $actual): void
     {
-        static::assertSameSize($expected, $actual);
+        self::assertSameSize($expected, $actual);
 
         foreach ($expected as $index => $expectedModel) {
             /** @var Model $actualModel */
             $actualModel = $actual->get($index);
 
-            static::assertTrue($actualModel->is($expectedModel));
+            self::assertTrue($actualModel->is($expectedModel));
         }
     }
 
@@ -652,7 +695,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      */
     protected function assertModelsHaveColumn(Collection $models, string $column): void
     {
-        static::assertEmpty(
+        self::assertEmpty(
             $models->pluck($column)->filter(function ($value): bool {
                 return $value === null;
             })->values()->all(),
@@ -666,7 +709,7 @@ class ModelRepositoryTest extends AbstractIntegrationTest
      */
     protected function assertModelsDoNotHaveColumn(Collection $models, string $column): void
     {
-        static::assertEmpty(
+        self::assertEmpty(
             $models->pluck($column)->filter(function ($value): bool {
                 return $value !== null;
             })->values()->all(),

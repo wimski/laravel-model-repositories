@@ -6,73 +6,79 @@ namespace Wimski\ModelRepositories\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\LazyCollection;
 use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
 
 /**
- * @template T of \Illuminate\Database\Eloquent\Model
- * @implements ModelRepositoryInterface<T>
+ * @template TModel of Model
+ * @implements ModelRepositoryInterface<TModel>
  */
 abstract class AbstractModelRepository implements ModelRepositoryInterface
 {
     /**
-     * @var T
+     * @var TModel
      */
-    protected $model;
+    protected Model $model;
 
-    public function builder(): Builder
+    public function builder(bool $withGlobalScopes = true)
     {
-        /** @var Builder<T> $builder */
-        $builder = $this->model->newQuery();
+        /** @var Builder<TModel> $builder */
+        $builder = $this->model->newQueryWithoutScopes();
 
+        if ($withGlobalScopes) {
+            $this->model->registerGlobalScopes($builder);
+        }
+
+        /** @var Builder<TModel>|TModel $builder */
         return $builder;
     }
 
     public function find($key, string ...$column)
     {
-        /** @var T|null $model */
-        $model = $this->model->find($key, $this->parseColumns(...$column));
+        /** @var TModel|null $model */
+        $model = $this->builder()->find($key, $this->parseColumns(...$column));
 
         return $model;
     }
 
     public function findOrFail($key, string ...$column)
     {
-        /** @var T $model */
-        $model = $this->model->findOrFail($key, $this->parseColumns(...$column));
+        /** @var TModel $model */
+        $model = $this->builder()->findOrFail($key, $this->parseColumns(...$column));
 
         return $model;
     }
 
     public function findMany($keys, string ...$column): Collection
     {
-        /** @var Collection<int, T> $models */
-        $models = $this->model->findMany($keys, $this->parseColumns(...$column));
+        /** @var Collection<int, TModel> $models */
+        $models = $this->builder()->findMany($keys, $this->parseColumns(...$column));
 
         return $models;
     }
 
     public function first(string ...$column)
     {
-        /** @var T|null $model */
-        $model = $this->model->first($this->parseColumns(...$column));
+        /** @var TModel|null $model */
+        $model = $this->builder()->first($this->parseColumns(...$column));
 
         return $model;
     }
 
     public function firstOrFail(string ...$column)
     {
-        /** @var T $model */
-        $model = $this->model->firstOrFail($this->parseColumns(...$column));
+        /** @var TModel $model */
+        $model = $this->builder()->firstOrFail($this->parseColumns(...$column));
 
         return $model;
     }
 
     public function firstWhere($column, $operator = null, $value = null, string $boolean = 'and')
     {
-        /** @var T|null $model */
-        $model = $this->model->firstWhere($column, $operator, $value, $boolean);
+        /** @var TModel|null $model */
+        $model = $this->builder()->firstWhere($column, $operator, $value, $boolean);
 
         return $model;
     }
@@ -85,22 +91,22 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
             $this->throwModelNotFoundException();
         }
 
-        /** @var T $model */
+        /** @var TModel $model */
         return $model;
     }
 
     public function where($column, $operator = null, $value = null, string $boolean = 'and'): Collection
     {
-        /** @var Collection<int, T> $models */
-        $models = $this->model->where($column, $operator, $value, $boolean)->get();
+        /** @var Collection<int, TModel> $models */
+        $models = $this->builder()->where($column, $operator, $value, $boolean)->get();
 
         return $models;
     }
 
     public function whereIn(string $column, array $values): Collection
     {
-        /** @var Collection<int, T> $models */
-        $models = $this->model->whereIn($column, $values)->get();
+        /** @var Collection<int, TModel> $models */
+        $models = $this->builder()->whereIn($column, $values)->get();
 
         return $models;
     }
@@ -108,68 +114,68 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
     /**
      * @param string  $column
      * @param mixed[] $values
-     * @return Collection<int, T>
+     * @return Collection<int, TModel>
      */
     public function whereNotIn(string $column, array $values): Collection
     {
-        /** @var Collection<int, T> $models */
-        $models = $this->model->whereNotIn($column, $values)->get();
+        /** @var Collection<int, TModel> $models */
+        $models = $this->builder()->whereNotIn($column, $values)->get();
 
         return $models;
     }
 
     public function cursor(): LazyCollection
     {
-        /** @var LazyCollection<int, T> $models */
-        $models = $this->model->cursor();
+        /** @var LazyCollection<int, TModel> $models */
+        $models = $this->builder()->cursor();
 
         return $models;
     }
 
     public function all(string ...$column): Collection
     {
-        /** @var Collection<int, T> $models */
-        $models = $this->model->all($this->parseColumns(...$column));
+        /** @var Collection<int, TModel> $models */
+        $models = $this->builder()->get($this->parseColumns(...$column));
 
         return $models;
     }
 
     public function make(array $attributes)
     {
-        /** @var T $model */
-        $model = $this->model->make($attributes);
+        /** @var TModel $model */
+        $model = $this->builder()->make($attributes);
 
         return $model;
     }
 
     public function findOrMake($key, string ...$column)
     {
-        /** @var T $model */
-        $model = $this->model->findOrNew($key, $this->parseColumns(...$column));
+        /** @var TModel $model */
+        $model = $this->builder()->findOrNew($key, $this->parseColumns(...$column));
 
         return $model;
     }
 
     public function firstWhereOrMake(array $attributes, array $values = [])
     {
-        /** @var T $model */
-        $model = $this->model->firstOrNew($attributes, $values);
+        /** @var TModel $model */
+        $model = $this->builder()->firstOrNew($attributes, $values);
 
         return $model;
     }
 
     public function create(array $attributes)
     {
-        /** @var T $model */
-        $model = $this->model->create($attributes);
+        /** @var TModel $model */
+        $model = $this->builder()->create($attributes);
 
         return $model;
     }
 
     public function firstWhereOrCreate(array $attributes, array $values = [])
     {
-        /** @var T $model */
-        $model = $this->model->firstOrCreate($attributes, $values);
+        /** @var TModel $model */
+        $model = $this->builder()->firstOrCreate($attributes, $values);
 
         return $model;
     }

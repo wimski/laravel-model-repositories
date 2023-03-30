@@ -35,7 +35,7 @@ class StubsPathResolverTest extends AbstractUnitTest
     {
         $path = $this->resolver->resolvePackagePath('stub-file');
 
-        static::assertSame(
+        self::assertSame(
             dirname(__DIR__, 3) .
             DIRECTORY_SEPARATOR .
             'stubs' .
@@ -64,6 +64,6 @@ class StubsPathResolverTest extends AbstractUnitTest
 
         $path = $this->resolver->resolveAppPath('stub-file');
 
-        static::assertSame('app-path', $path);
+        self::assertSame('app-path', $path);
     }
 }

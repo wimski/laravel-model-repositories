@@ -48,7 +48,7 @@ abstract class AbstractIntegrationTest extends TestCase
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadMigrationsFrom(static::getLaravelPath('Database' . DIRECTORY_SEPARATOR . 'migrations'));
+        $this->loadMigrationsFrom(self::getLaravelPath('Database' . DIRECTORY_SEPARATOR . 'migrations'));
     }
 
     protected function resolveApplication()
@@ -65,7 +65,7 @@ abstract class AbstractIntegrationTest extends TestCase
 
     public static function applicationBasePath(): string
     {
-        return $_ENV['APP_BASE_PATH'] ?? static::getLaravelPath('');
+        return $_ENV['APP_BASE_PATH'] ?? self::getLaravelPath('');
     }
 
     protected static function getLaravelPath(string $path): string
@@ -85,7 +85,7 @@ abstract class AbstractIntegrationTest extends TestCase
 
     protected function getAppStubPath(string $file): string
     {
-        return static::getLaravelPath(
+        return self::getLaravelPath(
             'App' .
             DIRECTORY_SEPARATOR .
             $file,
@@ -94,7 +94,7 @@ abstract class AbstractIntegrationTest extends TestCase
 
     protected function getStubsPath(string $file): string
     {
-        return static::getLaravelPath(
+        return self::getLaravelPath(
             'stubs' .
             DIRECTORY_SEPARATOR .
             $file,
