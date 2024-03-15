@@ -9,6 +9,14 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+## [v4.0.0] - 2024-03-15
+
+### Added
+* Laravel 11 support
+
+### Removed
+* PHP 7.4 and Laravel 8 support
+
 ## [v3.0.0] - 2023-03-30
 
 ### Changed
@@ -72,7 +80,8 @@ This changelog is initialized in release 1.0.0
 * Columns argument to ModelRepositoryInterface::all to be compatible with the underlying Eloquent model
 * FQN options for contract and repository to ModelRepositoryMakeCommand
 
-[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v3.0.0...master
+[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v4.0.0...master
+[v4.0.0]: https://github.com/wimski/laravel-model-repositories/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.8.0...v3.0.0
 [v2.8.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.7.0...v2.8.0
 [v2.7.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.6.0...v2.7.0
