@@ -18,8 +18,8 @@
     "homepage": "https://github.com/wimski/laravel-model-repositories",
     "require": {
         "php": "^7.4 || ^8.0",
-        "laravel/framework": "^8.0 || ^9.0 || ^10.0",
-        "nesbot/carbon": "^2.62.1"
+        "laravel/framework": "^8.0 || ^9.0 || ^10.0 || ^11.0",
+        "nesbot/carbon": "^2.62.1 || ^3.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",

@@ -21,7 +21,7 @@ class ModelWithRepository extends Model
     use HasFactory;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     protected $fillable = [
         'foo',
