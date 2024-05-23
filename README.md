@@ -117,6 +117,14 @@ class SomeService
 }
 ```
 
+## Publishing configuration file
+
+Because this package does not register its own service provider, your own service provider should be referenced when publishing this package's configuration file.
+
+```bash
+php artisan vendor:publish --provider=App\Providers\RepositoryServiceProvider
+```
+
 ## Namespace configuration
 
 The namespaces configuration is used to determine what the namespaces of your repository classes - and locations of the subsequent files - should be.
