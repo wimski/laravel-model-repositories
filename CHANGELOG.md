@@ -9,6 +9,8 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+## [v5.0.0] - 2025-01-17
+
 ### Changed
 * ModelRepositoryInterface::builder() now only returns a Builder
 
@@ -83,7 +85,8 @@ This changelog is initialized in release 1.0.0
 * Columns argument to ModelRepositoryInterface::all to be compatible with the underlying Eloquent model
 * FQN options for contract and repository to ModelRepositoryMakeCommand
 
-[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v4.0.0...master
+[Unreleased]: https://github.com/wimski/laravel-model-repositories/compare/v5.0.0...master
+[v5.0.0]: https://github.com/wimski/laravel-model-repositories/compare/v4.0.0...v5.0.0
 [v4.0.0]: https://github.com/wimski/laravel-model-repositories/compare/v3.0.0...v4.0.0
 [v3.0.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.8.0...v3.0.0
 [v2.8.0]: https://github.com/wimski/laravel-model-repositories/compare/v2.7.0...v2.8.0
