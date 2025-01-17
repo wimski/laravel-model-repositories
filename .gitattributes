@@ -6,6 +6,10 @@
 /.editorconfig      export-ignore
 /.gitattributes     export-ignore
 /.gitignore         export-ignore
+/Dockerfile         export-ignore
+/Makefile           export-ignore
+/docker-compose.yml export-ignore
+/phpstan-cache      export-ignore
 /phpstan.neon.dist  export-ignore
 /phpunit.xml.dist   export-ignore
 /tests              export-ignore
