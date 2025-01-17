@@ -22,7 +22,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
      */
     protected Model $model;
 
-    public function builder(bool $withGlobalScopes = true)
+    public function builder(bool $withGlobalScopes = true): Builder
     {
         /** @var Builder<TModel> $builder */
         $builder = $this->model->newQueryWithoutScopes();
@@ -31,7 +31,6 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
             $this->model->registerGlobalScopes($builder);
         }
 
-        /** @var Builder<TModel>|TModel $builder */
         return $builder;
     }
 

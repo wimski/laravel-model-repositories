@@ -9,6 +9,9 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+### Changed
+* ModelRepositoryInterface::builder() now only returns a Builder
+
 ## [v4.0.0] - 2024-03-15
 
 ### Added
