@@ -12,10 +12,12 @@
             <directory>./tests/Unit</directory>
         </testsuite>
     </testsuites>
-    <coverage processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">./src</directory>
         </include>
+    </source>
+    <coverage>
         <report>
             <clover outputFile="build/logs/clover.xml"/>
         </report>

@@ -6,14 +6,14 @@ namespace Wimski\ModelRepositories\Tests\Integration;
 
 use Illuminate\Contracts\Config\Repository as Config;
 use Illuminate\Foundation\Application as BaseApplication;
+use Illuminate\Foundation\Configuration\ApplicationBuilder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Orchestra\Testbench\Foundation\PackageManifest;
 use Orchestra\Testbench\TestCase;
 use RuntimeException;
 use Wimski\ModelRepositories\Tests\Laravel\App\Providers\ModelRepositoryServiceProvider;
 use Wimski\ModelRepositories\Tests\Laravel\Application;
 
-abstract class AbstractIntegrationTest extends TestCase
+abstract class AbstractIntegrationTestCase extends TestCase
 {
     use RefreshDatabase;
 
@@ -51,21 +51,20 @@ abstract class AbstractIntegrationTest extends TestCase
         $this->loadMigrationsFrom(self::getLaravelPath('Database' . DIRECTORY_SEPARATOR . 'migrations'));
     }
 
-    protected function resolveApplication()
+    protected function resolveApplication(): BaseApplication
     {
-        return tap(new Application($this->getBasePath()), function ($app) {
-            $app->bind(
-                'Illuminate\Foundation\Bootstrap\LoadConfiguration',
-                'Orchestra\Testbench\Bootstrap\LoadConfiguration'
-            );
-
-            PackageManifest::swap($app, $this);
-        });
+        return (new ApplicationBuilder(new Application($this->getApplicationBasePath())))
+            ->withProviders()
+            ->withMiddleware(static function ($middleware): void {
+                //
+            })
+            ->withCommands()
+            ->create();
     }
 
     public static function applicationBasePath(): string
     {
-        return $_ENV['APP_BASE_PATH'] ?? self::getLaravelPath('');
+        return self::getLaravelPath('');
     }
 
     protected static function getLaravelPath(string $path): string

@@ -15,8 +15,6 @@ use Wimski\ModelRepositories\DataObjects\NamespaceDataObject;
 
 class ModelRepositoryMakeCommand extends GeneratorCommand
 {
-    protected NamespaceResolverInterface $namespaceResolver;
-    protected StubsPathResolverInterface $stubsPathResolver;
     protected NamespaceDataObject $namespace;
     protected string $model;
     protected $name = 'make:repository';
@@ -24,12 +22,9 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
 
     public function __construct(
         Filesystem $files,
-        NamespaceResolverInterface $namespaceResolver,
-        StubsPathResolverInterface $stubsPathResolver
+        protected readonly NamespaceResolverInterface $namespaceResolver,
+        protected readonly StubsPathResolverInterface $stubsPathResolver
     ) {
-        $this->namespaceResolver = $namespaceResolver;
-        $this->stubsPathResolver = $stubsPathResolver;
-
         parent::__construct($files);
     }
 
@@ -164,9 +159,6 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
             : $this->stubsPathResolver->resolvePackagePath($stub);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     protected function getStub(): string
     {
         // This abstract method must be implemented, but is not used.
@@ -174,7 +166,7 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
     }
 
     /**
-     * @return mixed[][]
+     * @return array<array-key, array{0: string, 1: int, 2: string}>
      */
     protected function getArguments(): array
     {
@@ -184,7 +176,7 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
     }
 
     /**
-     * @return mixed[][]
+     * @return array<array-key, array{0: string, 1: null, 2: int, 3: string}>
      */
     protected function getOptions(): array
     {

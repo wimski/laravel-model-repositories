@@ -7,17 +7,14 @@ namespace Wimski\ModelRepositories\Tests\Unit\Resolvers;
 use Illuminate\Contracts\Foundation\Application;
 use Mockery;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use Wimski\ModelRepositories\Resolvers\StubsPathResolver;
-use Wimski\ModelRepositories\Tests\Unit\AbstractUnitTest;
+use Wimski\ModelRepositories\Tests\Unit\AbstractUnitTestCase;
 
-class StubsPathResolverTest extends AbstractUnitTest
+class StubsPathResolverTest extends AbstractUnitTestCase
 {
     protected StubsPathResolver $resolver;
-
-    /**
-     * @var Application|MockInterface
-     */
-    protected $app;
+    protected Application&MockInterface $app;
 
     protected function setUp(): void
     {
@@ -28,9 +25,7 @@ class StubsPathResolverTest extends AbstractUnitTest
         $this->resolver = new StubsPathResolver($this->app);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_resolves_a_package_path(): void
     {
         $path = $this->resolver->resolvePackagePath('stub-file');
@@ -47,14 +42,11 @@ class StubsPathResolverTest extends AbstractUnitTest
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_resolves_an_app_path(): void
     {
         $this->app
-            ->shouldReceive('basePath')
-            ->once()
+            ->expects('basePath')
             ->with(
                 'stubs' .
                 DIRECTORY_SEPARATOR .

@@ -10,7 +10,7 @@ class CreateModelWithoutRepositoriesTable extends Migration
 {
     public function up(): void
     {
-        Schema::create('model_without_repositories', function (Blueprint $table) {
+        Schema::create('model_without_repositories', function (Blueprint $table): void {
             $table->id();
             $table->timestamps();
         });
