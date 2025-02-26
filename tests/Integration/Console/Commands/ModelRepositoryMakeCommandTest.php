@@ -70,11 +70,11 @@ use Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithoutRepository;
 /**
  * @extends AbstractModelRepository<ModelWithoutRepository>
  */
-class ModelWithoutRepositoryRepository extends AbstractModelRepository implements ModelWithoutRepositoryRepositoryInterface
+readonly class ModelWithoutRepositoryRepository extends AbstractModelRepository implements ModelWithoutRepositoryRepositoryInterface
 {
     public function __construct(ModelWithoutRepository $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
     }
 }
 ', file_get_contents($this->getRepositoryPath()));
@@ -132,11 +132,11 @@ use Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithoutRepository;
 /**
  * @extends AbstractModelRepository<ModelWithoutRepository>
  */
-class Foo extends AbstractModelRepository implements Bar
+readonly class Foo extends AbstractModelRepository implements Bar
 {
     public function __construct(ModelWithoutRepository $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
     }
 }
 ', file_get_contents($repositoryFile));

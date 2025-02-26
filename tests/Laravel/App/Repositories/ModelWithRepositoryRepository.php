@@ -11,10 +11,10 @@ use Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository;
 /**
  * @extends AbstractModelRepository<ModelWithRepository>
  */
-class ModelWithRepositoryRepository extends AbstractModelRepository implements ModelWithRepositoryRepositoryInterface
+readonly class ModelWithRepositoryRepository extends AbstractModelRepository implements ModelWithRepositoryRepositoryInterface
 {
     public function __construct(ModelWithRepository $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
     }
 }
