@@ -75,10 +75,9 @@ abstract readonly class AbstractModelRepository implements ModelRepositoryInterf
         $model = $this->firstWhere($column, $operator, $value, $boolean);
 
         if ($model === null) {
-            $this->throwModelNotFoundException();
+            throw $this->makeModelNotFoundException();
         }
 
-        /** @var TModel $model */
         return $model;
     }
 
@@ -143,8 +142,19 @@ abstract readonly class AbstractModelRepository implements ModelRepositoryInterf
     /**
      * @throws ModelNotFoundException
      */
-    protected function throwModelNotFoundException(...$key): void
+    protected function throwModelNotFoundException(int|string ...$key): void
     {
-        throw (new ModelNotFoundException())->setModel(get_class($this->model), array_values($key));
+        throw $this->makeModelNotFoundException(...$key);
+    }
+
+    /**
+     * @return ModelNotFoundException<TModel>
+     */
+    protected function makeModelNotFoundException(int|string ...$key): ModelNotFoundException
+    {
+        /** @var ModelNotFoundException<TModel> $exception */
+        $exception = (new ModelNotFoundException())->setModel(get_class($this->model), array_values($key));
+
+        return $exception;
     }
 }
