@@ -22,78 +22,60 @@ interface ModelRepositoryInterface
     public function builder(bool $withGlobalScopes = true): Builder;
 
     /**
-     * @param int|string $key
-     * @param string     ...$column
      * @return TModel|null
      */
-    public function find($key, string ...$column);
+    public function find(int|string $key, string ...$column): ?Model;
 
     /**
-     * @param int|string $key
-     * @param string     ...$column
      * @return TModel
      * @throws ModelNotFoundException
      */
-    public function findOrFail($key, string ...$column);
+    public function findOrFail(int|string $key, string ...$column): Model;
 
     /**
-     * @param int[]|string[]|Arrayable<int|string, mixed> $keys
-     * @param string                                      ...$column
+     * @param Arrayable<array-key, int|string>|array<array-key, int|string> $keys
      * @return Collection<int, TModel>
      */
-    public function findMany($keys, string ...$column): Collection;
+    public function findMany(Arrayable|array $keys, string ...$column): Collection;
 
     /**
-     * @param string ...$column
      * @return TModel|null
      */
-    public function first(string ...$column);
+    public function first(string ...$column): ?Model;
 
     /**
-     * @param string ...$column
      * @return TModel
      * @throws ModelNotFoundException
      */
-    public function firstOrFail(string ...$column);
+    public function firstOrFail(string ...$column): Model;
 
     /**
-     * @param string|mixed[]|Closure|Expression $column
-     * @param mixed                             $operator
-     * @param mixed                             $value
-     * @param string                            $boolean
+     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|string> $column
      * @return TModel|null
      */
-    public function firstWhere($column, $operator = null, $value = null, string $boolean = 'and');
+    public function firstWhere(string|array|Closure|Expression $column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): ?Model;
 
     /**
-     * @param string|mixed[]|Closure|Expression $column
-     * @param mixed                             $operator
-     * @param mixed                             $value
-     * @param string                            $boolean
+     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|string> $column
      * @return TModel
      * @throws ModelNotFoundException
      */
-    public function firstWhereOrFail($column, $operator = null, $value = null, string $boolean = 'and');
+    public function firstWhereOrFail(string|array|Closure|Expression$column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): Model;
 
     /**
-     * @param string|mixed[]|Closure|Expression $column
-     * @param mixed                             $operator
-     * @param mixed                             $value
-     * @param string                            $boolean
+     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|string> $column
      * @return Collection<int, TModel>
      */
-    public function where($column, $operator = null, $value = null, string $boolean = 'and'): Collection;
+    public function where(string|array|Closure|Expression$column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): Collection;
 
     /**
-     * @param string  $column
-     * @param mixed[] $values
+     * @param array<array-key, mixed> $values
      * @return Collection<int, TModel>
      */
     public function whereIn(string $column, array $values): Collection;
 
     /**
-     * @param string  $column
-     * @param mixed[] $values
+     * @param array<array-key, mixed> $values
      * @return Collection<int, TModel>
      */
     public function whereNotIn(string $column, array $values): Collection;
@@ -104,8 +86,6 @@ interface ModelRepositoryInterface
     public function cursor(): LazyCollection;
 
     /**
-     *
-     * @param string ...$column
      * @return Collection<int, TModel>
      */
     public function all(string ...$column): Collection;
@@ -114,32 +94,30 @@ interface ModelRepositoryInterface
      * @param array<string, mixed> $attributes
      * @return TModel
      */
-    public function make(array $attributes);
+    public function make(array $attributes): Model;
 
     /**
-     * @param int|string $key
-     * @param string     ...$column
      * @return TModel
      */
-    public function findOrMake($key, string ...$column);
-
-    /**
-     * @param array<string, mixed> $attributes
-     * @param array<string, mixed> $values
-     * @return TModel
-     */
-    public function firstWhereOrMake(array $attributes, array $values = []);
-
-    /**
-     * @param array<string, mixed> $attributes
-     * @return TModel
-     */
-    public function create(array $attributes);
+    public function findOrMake(int|string $key, string ...$column): Model;
 
     /**
      * @param array<string, mixed> $attributes
      * @param array<string, mixed> $values
      * @return TModel
      */
-    public function firstWhereOrCreate(array $attributes, array $values = []);
+    public function firstWhereOrMake(array $attributes, array $values = []): Model;
+
+    /**
+     * @param array<string, mixed> $attributes
+     * @return TModel
+     */
+    public function create(array $attributes): Model;
+
+    /**
+     * @param array<string, mixed> $attributes
+     * @param array<string, mixed> $values
+     * @return TModel
+     */
+    public function firstWhereOrCreate(array $attributes, array $values = []): Model;
 }
