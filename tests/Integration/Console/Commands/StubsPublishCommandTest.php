@@ -59,11 +59,11 @@ use Wimski\ModelRepositories\Repositories\AbstractModelRepository;
 /**
  * @extends AbstractModelRepository<{{ model }}>
  */
-class {{ class }} extends AbstractModelRepository implements {{ repositoryInterface }}
+readonly class {{ class }} extends AbstractModelRepository implements {{ repositoryInterface }}
 {
     public function __construct({{ model }} $model)
     {
-        $this->model = $model;
+        parent::__construct($model);
     }
 }
 ', file_get_contents($this->getRepositoryPath()));

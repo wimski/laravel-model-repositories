@@ -18,12 +18,15 @@ use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
  * @template TModel of Model
  * @implements ModelRepositoryInterface<TModel>
  */
-abstract class AbstractModelRepository implements ModelRepositoryInterface
+abstract readonly class AbstractModelRepository implements ModelRepositoryInterface
 {
     /**
-     * @var TModel
+     * @param TModel $model
      */
-    protected Model $model;
+    public function __construct(
+        protected Model $model,
+    ) {
+    }
 
     public function builder(bool $withGlobalScopes = true): Builder
     {
