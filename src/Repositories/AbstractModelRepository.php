@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Wimski\ModelRepositories\Repositories;
 
+use Closure;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Support\LazyCollection;
 use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
 
@@ -33,37 +36,38 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $builder;
     }
 
-    public function find($key, string ...$column)
+    public function find(int|string $key, string ...$column): ?Model
     {
         return $this->builder()->find($key, $this->parseColumns(...$column));
     }
 
-    public function findOrFail($key, string ...$column)
+    public function findOrFail(int|string $key, string ...$column): Model
     {
         return $this->builder()->findOrFail($key, $this->parseColumns(...$column));
     }
 
-    public function findMany($keys, string ...$column): Collection
+    public function findMany(Arrayable|array $keys, string ...$column): Collection
     {
+        /** @var Arrayable<array-key, mixed>|array<array-key, int|string> $keys */
         return $this->builder()->findMany($keys, $this->parseColumns(...$column));
     }
 
-    public function first(string ...$column)
+    public function first(string ...$column): ?Model
     {
         return $this->builder()->first($this->parseColumns(...$column));
     }
 
-    public function firstOrFail(string ...$column)
+    public function firstOrFail(string ...$column): Model
     {
         return $this->builder()->firstOrFail($this->parseColumns(...$column));
     }
 
-    public function firstWhere($column, $operator = null, $value = null, string $boolean = 'and')
+    public function firstWhere(string|array|Closure|Expression $column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): ?Model
     {
         return $this->builder()->firstWhere($column, $operator, $value, $boolean);
     }
 
-    public function firstWhereOrFail($column, $operator = null, $value = null, string $boolean = 'and')
+    public function firstWhereOrFail(string|array|Closure|Expression$column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): Model
     {
         $model = $this->firstWhere($column, $operator, $value, $boolean);
 
@@ -75,7 +79,7 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $model;
     }
 
-    public function where($column, $operator = null, $value = null, string $boolean = 'and'): Collection
+    public function where(string|array|Closure|Expression$column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): Collection
     {
         return $this->builder()->where($column, $operator, $value, $boolean)->get();
     }
@@ -85,11 +89,6 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $this->builder()->whereIn($column, $values)->get();
     }
 
-    /**
-     * @param string  $column
-     * @param mixed[] $values
-     * @return Collection<int, TModel>
-     */
     public function whereNotIn(string $column, array $values): Collection
     {
         return $this->builder()->whereNotIn($column, $values)->get();
@@ -105,27 +104,27 @@ abstract class AbstractModelRepository implements ModelRepositoryInterface
         return $this->builder()->get($this->parseColumns(...$column));
     }
 
-    public function make(array $attributes)
+    public function make(array $attributes): Model
     {
         return $this->builder()->make($attributes);
     }
 
-    public function findOrMake($key, string ...$column)
+    public function findOrMake(int|string $key, string ...$column): Model
     {
         return $this->builder()->findOrNew($key, $this->parseColumns(...$column));
     }
 
-    public function firstWhereOrMake(array $attributes, array $values = [])
+    public function firstWhereOrMake(array $attributes, array $values = []): Model
     {
         return $this->builder()->firstOrNew($attributes, $values);
     }
 
-    public function create(array $attributes)
+    public function create(array $attributes): Model
     {
         return $this->builder()->create($attributes);
     }
 
-    public function firstWhereOrCreate(array $attributes, array $values = [])
+    public function firstWhereOrCreate(array $attributes, array $values = []): Model
     {
         return $this->builder()->firstOrCreate($attributes, $values);
     }

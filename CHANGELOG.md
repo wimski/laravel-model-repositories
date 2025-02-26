@@ -14,6 +14,7 @@ This changelog is initialized in release 1.0.0
 
 ### Changed
 * Update minimum required PHP version to 8.3
+* Update ModelRepositoryInterface signatures
 
 ### Removed
 * Laravel 9 and 10 support
