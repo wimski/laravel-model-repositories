@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Wimski\ModelRepositories\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Wimski\ModelRepositories\Console\Commands\ModelRepositoryMakeCommand;
 use Wimski\ModelRepositories\Console\Commands\StubsPublishCommand;
+use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;
 use Wimski\ModelRepositories\Contracts\Resolvers\NamespaceResolverInterface;
 use Wimski\ModelRepositories\Contracts\Resolvers\StubsPathResolverInterface;
 use Wimski\ModelRepositories\Contracts\StubsPublisherInterface;
+use Wimski\ModelRepositories\Repositories\AbstractModelRepository;
 use Wimski\ModelRepositories\Resolvers\NamespaceResolver;
 use Wimski\ModelRepositories\Resolvers\StubsPathResolver;
 use Wimski\ModelRepositories\StubsPublisher;
@@ -17,7 +20,7 @@ use Wimski\ModelRepositories\StubsPublisher;
 class ModelRepositoryServiceProvider extends ServiceProvider
 {
     /**
-     * @var array<string, string>
+     * @var array<class-string<ModelRepositoryInterface<covariant Model>>, class-string<AbstractModelRepository<covariant Model>>>
      */
     protected array $repositories = [];
 
