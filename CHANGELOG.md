@@ -16,6 +16,7 @@ This changelog is initialized in release 1.0.0
 * Update minimum required PHP version to 8.3
 * Update ModelRepositoryInterface signatures
 * Make AbstractModelRepository readonly and use promoted property
+* Make typing of ModelRepositoryServiceProvider::$repositories more explicit
 
 ### Removed
 * Laravel 9 and 10 support
