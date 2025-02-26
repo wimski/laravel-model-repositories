@@ -9,6 +9,16 @@ This changelog is initialized in release 1.0.0
 
 ## [Unreleased]
 
+### Added
+* Laravel 12 support
+
+### Changed
+* Update minimum required PHP version to 8.3
+
+### Removed
+* Laravel 9 and 10 support
+* Carbon
+
 ## [v5.0.0] - 2025-01-17
 
 ### Changed

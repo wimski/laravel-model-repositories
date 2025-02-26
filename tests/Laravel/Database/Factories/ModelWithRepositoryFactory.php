@@ -14,9 +14,6 @@ class ModelWithRepositoryFactory extends Factory
 {
     protected $model = ModelWithRepository::class;
 
-    /**
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [

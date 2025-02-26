@@ -8,17 +8,14 @@ use Exception;
 use Illuminate\Contracts\Config\Repository as Config;
 use Mockery;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\Test;
 use Wimski\ModelRepositories\Resolvers\NamespaceResolver;
-use Wimski\ModelRepositories\Tests\Unit\AbstractUnitTest;
+use Wimski\ModelRepositories\Tests\Unit\AbstractUnitTestCase;
 
-class NamespaceResolverTest extends AbstractUnitTest
+class NamespaceResolverTest extends AbstractUnitTestCase
 {
     protected NamespaceResolver $resolver;
-
-    /**
-     * @var Config|MockInterface
-     */
-    protected $config;
+    protected Config&MockInterface $config;
 
     protected function setUp(): void
     {
@@ -29,14 +26,11 @@ class NamespaceResolverTest extends AbstractUnitTest
         $this->resolver = new NamespaceResolver($this->config);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_resolves_a_namespace_configuration_for_a_model_class(): void
     {
         $this->config
-            ->shouldReceive('get')
-            ->once()
+            ->expects('get')
             ->with('model-repositories.namespaces')
             ->andReturn([
                 [
@@ -51,17 +45,14 @@ class NamespaceResolverTest extends AbstractUnitTest
         self::assertSame('\\App\\Models', $namespaces->getModelsNamespace());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_an_error_if_no_namespace_configuration_could_be_found_for_a_model_class(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('No namespace found for Foo\\Bar');
 
         $this->config
-            ->shouldReceive('get')
-            ->once()
+            ->expects('get')
             ->with('model-repositories.namespaces')
             ->andReturn([]);
 

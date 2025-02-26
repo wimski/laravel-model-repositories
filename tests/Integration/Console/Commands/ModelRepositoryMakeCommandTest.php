@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Wimski\ModelRepositories\Tests\Integration\Console\Commands;
 
 use Illuminate\Testing\PendingCommand;
-use Wimski\ModelRepositories\Tests\Integration\AbstractIntegrationTest;
+use PHPUnit\Framework\Attributes\Test;
+use Wimski\ModelRepositories\Tests\Integration\AbstractIntegrationTestCase;
 use Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithoutRepository;
 use Wimski\ModelRepositories\Tests\Laravel\App\Models\ModelWithRepository;
 
-class ModelRepositoryMakeCommandTest extends AbstractIntegrationTest
+class ModelRepositoryMakeCommandTest extends AbstractIntegrationTestCase
 {
     protected function tearDown(): void
     {
@@ -24,9 +25,7 @@ class ModelRepositoryMakeCommandTest extends AbstractIntegrationTest
         }
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_makes_a_model_repository(): void
     {
         /** @var PendingCommand $command */
@@ -43,8 +42,6 @@ class ModelRepositoryMakeCommandTest extends AbstractIntegrationTest
 
         self::assertSame(
             '<?php
-
-declare(strict_types=1);
 
 namespace Wimski\ModelRepositories\Tests\Laravel\App\Contracts\Repositories;
 
@@ -83,9 +80,7 @@ class ModelWithoutRepositoryRepository extends AbstractModelRepository implement
 ', file_get_contents($this->getRepositoryPath()));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_makes_a_model_repository_with_specific_fqns(): void
     {
         $contractDir    = $this->getAppStubPath('Foo');
@@ -109,8 +104,6 @@ class ModelWithoutRepositoryRepository extends AbstractModelRepository implement
 
         self::assertSame(
             '<?php
-
-declare(strict_types=1);
 
 namespace Wimski\ModelRepositories\Tests\Laravel\App\Foo;
 
@@ -154,9 +147,7 @@ class Foo extends AbstractModelRepository implements Bar
         rmdir($repositoryDir);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_an_error_if_no_namespace_configuration_could_be_found_for_the_model_class(): void
     {
         /** @var PendingCommand $command */
@@ -169,9 +160,7 @@ class Foo extends AbstractModelRepository implements Bar
             ->execute();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_an_error_if_either_of_the_repository_files_already_exists(): void
     {
         /** @var PendingCommand $command */
@@ -184,9 +173,7 @@ class Foo extends AbstractModelRepository implements Bar
             ->execute();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_uses_the_published_stubs_when_available(): void
     {
         $interfaceStub  = $this->getStubsPath('model.repository.interface.stub');

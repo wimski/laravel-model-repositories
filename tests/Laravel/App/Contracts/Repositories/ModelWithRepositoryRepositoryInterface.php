@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Wimski\ModelRepositories\Tests\Laravel\App\Contracts\Repositories;
 
 use Wimski\ModelRepositories\Contracts\Repositories\ModelRepositoryInterface;

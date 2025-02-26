@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Wimski\ModelRepositories\Tests\Integration\Console\Commands;
 
 use Illuminate\Testing\PendingCommand;
-use Wimski\ModelRepositories\Tests\Integration\AbstractIntegrationTest;
+use PHPUnit\Framework\Attributes\Test;
+use Wimski\ModelRepositories\Tests\Integration\AbstractIntegrationTestCase;
 
-class StubsPublishCommandTest extends AbstractIntegrationTest
+class StubsPublishCommandTest extends AbstractIntegrationTestCase
 {
     protected function tearDown(): void
     {
@@ -17,9 +18,7 @@ class StubsPublishCommandTest extends AbstractIntegrationTest
         unlink($this->getRepositoryPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_publishes_stubs(): void
     {
         /** @var PendingCommand $command */
@@ -33,8 +32,6 @@ class StubsPublishCommandTest extends AbstractIntegrationTest
         self::assertFileExists($this->getRepositoryPath());
 
         self::assertSame('<?php
-
-declare(strict_types=1);
 
 namespace {{ namespace }};
 

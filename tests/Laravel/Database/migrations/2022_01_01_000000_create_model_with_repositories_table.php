@@ -10,7 +10,7 @@ class CreateModelWithRepositoriesTable extends Migration
 {
     public function up(): void
     {
-        Schema::create('model_with_repositories', function (Blueprint $table) {
+        Schema::create('model_with_repositories', function (Blueprint $table): void {
             $table->id();
             $table->string('foo');
             $table->string('bar');

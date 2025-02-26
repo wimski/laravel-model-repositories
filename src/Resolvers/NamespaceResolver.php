@@ -9,13 +9,11 @@ use Illuminate\Contracts\Config\Repository as Config;
 use Wimski\ModelRepositories\Contracts\Resolvers\NamespaceResolverInterface;
 use Wimski\ModelRepositories\DataObjects\NamespaceDataObject;
 
-class NamespaceResolver implements NamespaceResolverInterface
+readonly class NamespaceResolver implements NamespaceResolverInterface
 {
-    protected Config $config;
-
-    public function __construct(Config $config)
-    {
-        $this->config = $config;
+    public function __construct(
+        protected Config $config,
+    ) {
     }
 
     public function resolve(string $model): NamespaceDataObject
@@ -28,11 +26,11 @@ class NamespaceResolver implements NamespaceResolverInterface
         foreach ($namespaces as $namespace) {
             $modelNamespace = ltrim(trim($namespace['models']), '\\');
 
-            if (strpos($model, $modelNamespace) === 0) {
+            if (str_starts_with($model, $modelNamespace)) {
                 return new NamespaceDataObject($namespace);
             }
         }
 
-        throw new Exception('No namespace found for ' . $model);
+        throw new Exception("No namespace found for {$model}");
     }
 }

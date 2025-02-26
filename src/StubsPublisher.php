@@ -10,7 +10,7 @@ use Wimski\ModelRepositories\Contracts\StubsPublisherInterface;
 
 class StubsPublisher implements StubsPublisherInterface
 {
-    protected const STUB_FILES = [
+    protected const array STUB_FILES = [
         'model.repository.interface.stub',
         'model.repository.stub',
     ];
