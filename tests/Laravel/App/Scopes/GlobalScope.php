@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
+/**
+ * @template TModel of Model
+ * @implements Scope<TModel>
+ */
 class GlobalScope implements Scope
 {
     /**
-     * @template TModel of Model
-     * @param  Builder<TModel> $builder
+     * @param  Builder<covariant TModel> $builder
      * @param  TModel          $model
      * @return void
      */

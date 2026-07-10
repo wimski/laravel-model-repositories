@@ -30,6 +30,7 @@ abstract readonly class AbstractModelRepository implements ModelRepositoryInterf
 
     public function builder(bool $withGlobalScopes = true): Builder
     {
+        /** @var Builder<TModel> $builder */
         $builder = $this->model->newQueryWithoutScopes();
 
         if ($withGlobalScopes) {
@@ -51,8 +52,10 @@ abstract readonly class AbstractModelRepository implements ModelRepositoryInterf
 
     public function findMany(Arrayable|array $keys, string ...$column): Collection
     {
-        /** @var Arrayable<array-key, mixed>|array<array-key, int|string> $keys */
-        return $this->builder()->findMany($keys, $this->parseColumns(...$column));
+        /** @var Collection<int, TModel> $result */
+        $result = $this->builder()->findMany($keys, $this->parseColumns(...$column));
+
+        return $result;
     }
 
     public function first(string ...$column): ?Model
@@ -83,17 +86,26 @@ abstract readonly class AbstractModelRepository implements ModelRepositoryInterf
 
     public function where(string|array|Closure|Expression$column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): Collection
     {
-        return $this->builder()->where($column, $operator, $value, $boolean)->get();
+        /** @var Collection<int, TModel> $result */
+        $result = $this->builder()->where($column, $operator, $value, $boolean)->get();
+
+        return $result;
     }
 
     public function whereIn(string $column, array $values): Collection
     {
-        return $this->builder()->whereIn($column, $values)->get();
+        /** @var Collection<int, TModel> $result */
+        $result = $this->builder()->whereIn($column, $values)->get();
+
+        return $result;
     }
 
     public function whereNotIn(string $column, array $values): Collection
     {
-        return $this->builder()->whereNotIn($column, $values)->get();
+        /** @var Collection<int, TModel> $result */
+        $result = $this->builder()->whereNotIn($column, $values)->get();
+
+        return $result;
     }
 
     public function cursor(): LazyCollection
@@ -103,7 +115,10 @@ abstract readonly class AbstractModelRepository implements ModelRepositoryInterf
 
     public function all(string ...$column): Collection
     {
-        return $this->builder()->get($this->parseColumns(...$column));
+        /** @var Collection<int, TModel> $result */
+        $result = $this->builder()->get($this->parseColumns(...$column));
+
+        return $result;
     }
 
     public function make(array $attributes): Model

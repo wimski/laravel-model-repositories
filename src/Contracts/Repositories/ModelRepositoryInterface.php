@@ -33,7 +33,7 @@ interface ModelRepositoryInterface
     public function findOrFail(int|string $key, string ...$column): Model;
 
     /**
-     * @param Arrayable<array-key, int|string>|array<array-key, int|string> $keys
+     * @param Arrayable<array-key, mixed>|array<array-key, int|string> $keys
      * @return Collection<int, TModel>
      */
     public function findMany(Arrayable|array $keys, string ...$column): Collection;
@@ -50,20 +50,20 @@ interface ModelRepositoryInterface
     public function firstOrFail(string ...$column): Model;
 
     /**
-     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|string> $column
+     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|literal-string> $column
      * @return TModel|null
      */
     public function firstWhere(string|array|Closure|Expression $column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): ?Model;
 
     /**
-     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|string> $column
+     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|literal-string> $column
      * @return TModel
      * @throws ModelNotFoundException
      */
     public function firstWhereOrFail(string|array|Closure|Expression$column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): Model;
 
     /**
-     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|string> $column
+     * @param string|array<int|string, mixed>|Closure(Builder<TModel>):Builder<TModel>|Expression<float|int|literal-string> $column
      * @return Collection<int, TModel>
      */
     public function where(string|array|Closure|Expression$column, mixed $operator = null, mixed $value = null, string $boolean = 'and'): Collection;

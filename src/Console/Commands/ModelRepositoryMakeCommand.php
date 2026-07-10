@@ -165,9 +165,6 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
         return '';
     }
 
-    /**
-     * @return array<array-key, array{0: string, 1: int, 2: string}>
-     */
     protected function getArguments(): array
     {
         return [
@@ -175,12 +172,10 @@ class ModelRepositoryMakeCommand extends GeneratorCommand
         ];
     }
 
-    /**
-     * @return array<array-key, array{0: string, 1: null, 2: int, 3: string}>
-     */
     protected function getOptions(): array
     {
-        return [
+        // https://github.com/laravel/framework/issues/60723
+        return [ // @phpstan-ignore return.type
             ['contract', null, InputOption::VALUE_OPTIONAL, 'The FQN of the repository interface to generate'],
             ['repository', null, InputOption::VALUE_OPTIONAL, 'The FQN of the repository class to generate'],
         ];
